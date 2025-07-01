@@ -42,7 +42,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" suppressHydrationWarning>      
-      <body className={`${notoSerif.className} ${inter.variable} ${danfoFont.variable} antialiased`}>        
+      <body 
+      suppressHydrationWarning={true}
+      className={`${notoSerif.className} ${inter.variable} ${danfoFont.variable} antialiased`}>        
         <ThemeProvider
           attribute="class"
           defaultTheme="dark"
