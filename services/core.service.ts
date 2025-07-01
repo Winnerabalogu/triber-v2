@@ -1,0 +1,97 @@
+import { Eye, FileText, Link2, Target } from "lucide-react";
+
+interface FeatureUsageData {
+  name: string;
+  value: number;
+  progress: number;
+  icon: React.ElementType;
+}
+
+interface FundabilityOverviewData {
+  month: string;
+  yourScore: number;
+  averageScore: number;
+}
+
+interface ActivityData {
+  title: string;
+  status1: string;
+  status2: string;
+  date: string;
+  completion: number;
+}
+
+interface BarChartItem {
+    name: string;
+    views: number;
+}
+
+
+const mockFeaturesUsedData: FeatureUsageData[] = [
+  { name: 'Profile Views', value: 32, progress: 32, icon: Eye },
+  { name: 'Fundability Test Score', value: 12, progress: 12, icon: FileText },
+  { name: 'Listed Connections', value: 5, progress: 5, icon: Link2 },
+  { name: 'Valuation Score', value: 40, progress: 40, icon: Target },
+];
+
+const mockFundabilityOverviewData: FundabilityOverviewData[] = [
+  { month: 'Jan', yourScore: 220, averageScore: 200 },
+  { month: 'Feb', yourScore: 180, averageScore: 230 },
+  { month: 'Mar', yourScore: 280, averageScore: 210 },
+  { month: 'Apr', yourScore: 250, averageScore: 330 },
+  { month: 'May', yourScore: 350, averageScore: 400 },
+  { month: 'Jun', yourScore: 320, averageScore: 450 },
+  { month: 'Jul', yourScore: 380, averageScore: 300 },
+  { month: 'Aug', yourScore: 330, averageScore: 250 },
+  { month: 'Sep', yourScore: 200, averageScore: 310 },
+  { month: 'Oct', yourScore: 150, averageScore: 360 },
+  { month: 'Nov', yourScore: 190, averageScore: 420 },
+  { month: 'Dec', yourScore: 280, averageScore: 440 },
+];
+
+const mockRecentActivity: ActivityData[] = [
+    { title: "Chakra Soft Technologies", status1: "Completed", status2: "Funded", date: "14th June 2025", completion: 100 },
+      { title: "Chakra Soft Technologies", status1: "Completed", status2: "Funded", date: "14th June 2025", completion: 100 },
+    { title: "Valuation of Business", status1: "Not Completed", status2: "Yet to Complete Valuation", date: "14th June 2025", completion: 10 },
+    { title: "Business Registration", status1: "Pending Review", status2: "Profile Registration", date: "14th June 2025", completion: 50 },
+    { title: "Deal Room Profile Creation", status1: "Completed", status2: "Deal Room Profile Approved", date: "14th June 2025", completion: 100 },
+    { title: "Proposal Submitted Successfully", status1: "Pending", status2: "Proposal Awaiting Review", date: "14th June 2025", completion: 25 },
+    { title: "Business Registered Successfully", status1: "Completed", status2: "Profile Registered Successfully", date: "14th June 2025", completion: 100 }    
+];
+const mockBarChartData: BarChartItem[] = [
+    { name: 'W1', views: 320 }, { name: 'W2', views: 220 }, { name: 'W3', views: 120 },
+    { name: 'W4', views: 290 }, { name: 'W5', views: 500 }, { name: 'W6', views: 420 },
+    { name: 'W7', views: 480 }, { name: 'W8', views: 290 }, { name: 'W9', views: 150 },
+];
+// --- MOCK DATA ---
+const mockDashboardData = {
+  introCards: [
+    { title: "Ready to take your business to the next level", description: ["Complete the fundability test", "Get your valuation score in just a few clicks", "Go to the Deal Room to explore"], featured: true },
+    { title: "Sell your business, Find Investors", description: "List, connect and close deals with top investors today!", featured: false },
+    { title: "Buy a business, Invest in a business", description: "Find opportunities, connect with founders, and grow your portfolio.", featured: false },
+    { title: "Deal Room: Send proposals to businesses and investors", description: "Connect, Negotiate, and Finalize investments all in one place", featured: false },
+],
+  stats: [
+    { label: "Profile Views", value: 0, icon: Eye },
+    { label: "Fundability Test Score", value: 0, icon: FileText },
+    { label: "Listed Connections", value: 0, icon: Link2 },
+    { label: "Valuation Score", value: 0, icon: Target },
+],
+ featuresUsed: mockFeaturesUsedData,
+  fundabilityOverview: mockFundabilityOverviewData,
+  recentActivity: mockRecentActivity,
+  barChartData: mockBarChartData,  
+};
+
+class CoreService {
+  async getDashboardData(): Promise<typeof mockDashboardData> {
+    console.log("Fetching mock dashboard data...");
+    return new Promise(resolve => {
+      setTimeout(() => {
+        resolve(mockDashboardData);
+      }, 500); 
+    });
+  }
+}
+
+export default new CoreService();
