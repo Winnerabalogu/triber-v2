@@ -7,17 +7,12 @@ import { ValuationHistoryItem } from '@/lib/types';
 import CoreService from '@/services/core.service';
 import { TrendingUp, FileClock } from 'lucide-react';
 import { useModal } from '@/contexts/ModalContext';
+import StatusPill from '@/components/ui/status-pill'
+import InfoCard from './InfoCard';
 
 interface ValuationLandingProps {
     onStartTest: (type: 'startup' | 'sme') => void;
 }
-
-const InfoCard = ({ title, description }: { title: string; description: string; }) => (
-    <div className="bg-background p-4 rounded-lg border border-foreground/60 h-full">
-        <h3 className="font-bold text-foreground text-sm mb-1">{title}</h3>
-        <p className="text-xs text-muted-foreground">{description}</p>
-    </div>
-);
 
 export default function ValuationLanding({ onStartTest }: ValuationLandingProps) {
     const [history, setHistory] = useState<ValuationHistoryItem[]>([]);
@@ -66,13 +61,16 @@ export default function ValuationLanding({ onStartTest }: ValuationLandingProps)
                                 <button 
                                     key={item.id} 
                                     onClick={() => handleHistoryClick(item)}
-                                    className="w-full flex justify-between items-center text-sm p-2 rounded-md hover:bg-muted transition-colors text-left"
+                                    className="w-full flex justify-between items-center text-sm p-2 rounded-md hover:bg-primary/20 transition-colors text-left"
                                 >
                                     <div>
                                         <p className="font-semibold text-foreground">{item.name} <span className="text-xs text-muted-foreground">({item.type})</span></p>
                                         <p className="text-xs text-muted-foreground">{item.method}</p>
                                     </div>
-                                    <span className="font-bold text-lg text-primary">{item.score}</span>
+                                   <div className="flex items-center gap-4">
+                                        <StatusPill score={item.score} />
+                                        <span className="font-bold text-lg text-primary w-8 text-right">{item.score}</span>
+                                    </div>
                                 </button>
                             ))}
                         </div>

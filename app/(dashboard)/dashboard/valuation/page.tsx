@@ -6,7 +6,7 @@ import CoreService from '@/services/core.service';
 import ValuationLanding from '@/components/dashboard/valuation/ValuationLanding';
 import MethodSelection from '@/components/dashboard/valuation/MethodSelection';
 import ValuationForm from '@/components/dashboard/valuation/ValuationForm';
-import ValuationReport from '@/components/dashboard//valuation/ValuationReport';
+import ValuationReport from '@/components/dashboard/valuation/ValuationReport';
 
 export type ValuationStep = 'landing' | 'methods' | 'form' | 'report';
 export type TestType = 'startup' | 'sme';
@@ -51,8 +51,17 @@ export default function ValuationPage() {
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                 >
                     {step === 'landing' && <ValuationLanding onStartTest={handleStartTest} />}
-                    {step === 'methods' && testType && <MethodSelection testType={testType} onMethodSelect={handleMethodSelect} onBack={() => setStep('landing')} />}
-                    {step === 'form' && selectedMethod && <ValuationForm method={selectedMethod} onFormSubmit={handleFormSubmit} onBack={() => setStep('methods')} />}
+                    
+                    {step === 'methods' && testType && <MethodSelection testType={testType} onMethodSelect={handleMethodSelect} onBack={() => setStep('landing')} />}                
+                    {step === 'form' && selectedMethod && testType && (
+                        <ValuationForm 
+                            method={selectedMethod} 
+                            onFormSubmit={handleFormSubmit} 
+                            onBack={() => setStep('methods')} 
+                            testType={testType} 
+                        />
+                    )}
+
                     {step === 'report' && reportData && <ValuationReport data={reportData} onRestart={() => setStep('landing')} />}
                 </motion.div>
             </AnimatePresence>

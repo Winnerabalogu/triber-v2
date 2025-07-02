@@ -4,6 +4,7 @@ import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
 import { CheckCircle } from "lucide-react";
+import InfoCard from './InfoCard';
 
 const startupMethods = [
     { id: 'berkus', name: 'Berkus Method', description: 'A fairly simple valuation technique that can be used as a quick rule of thumb.' },
@@ -29,6 +30,13 @@ export default function MethodSelection({ testType, onMethodSelect, onBack }: Me
     const methods = testType === 'startup' ? startupMethods : smeMethods;
 
     return (
+         <div className="space-y-8">
+         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <InfoCard title="Calculate Valuation" description="Please fill out some basic information about your company. These will be presented in the valuation report at the end of the process." />
+                <InfoCard title="What Does A Low Score Signify?" description="A low score does not signal an inability to secure funding. It focuses on improvements to enable the business secure quicker, cheaper and flexible funding." />
+                <InfoCard title="Why You Should Go To The Deal Room" description="Go to the Deal Room to explore active funding opportunities and connect with investors." />
+            </div>
+
         <div className="bg-background p-6 md:p-8 rounded-lg border border-foreground/69">
             <h2 className="text-xl font-bold text-foreground mb-2">Take Valuation Test As:</h2>
             <p className="text-sm text-muted-foreground mb-6">Select a valuation method. Different methods might be more suitable than others.</p>
@@ -65,5 +73,6 @@ export default function MethodSelection({ testType, onMethodSelect, onBack }: Me
                 </Button>
             </div>
         </div>
+    </div>
     );
 }
