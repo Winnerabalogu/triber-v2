@@ -130,13 +130,13 @@ export default function RadialScoreChart({ score, valuation }: RadialScoreChartP
           </text>
 
           {/* 18 marker with red dot */}
-          <circle cx="35" cy="135" r="4" fill="#ef4444" />
-          <text x="10" y="140" fill="#9ca3af" fontSize="14" fontWeight="500">
+          <circle cx="25" cy="93" r="4" fill="#ef4444" />
+          <text x="2" y="95" fill="#9ca3af" fontSize="14" fontWeight="500">
             18
           </text>
 
           {/* 42 marker */}
-          <text x="95" y="19" fill="#9ca3af" fontSize="14" fontWeight="500">
+          <text x="70" y="19" fill="#9ca3af" fontSize="14" fontWeight="500">
             42
           </text>
 
