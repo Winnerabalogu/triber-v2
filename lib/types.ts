@@ -31,3 +31,58 @@ export interface AuthResponse {
   token: string;
   user: User;
 }
+export interface ValuationHistoryItem {
+  id: string;
+  name: string;
+  type: 'Startup' | 'SME';
+  method: string;
+  date: string;
+  score: number;
+  status: 'Completed' | 'Pending';
+}
+interface BaseField {
+  name: string;
+}
+export interface TextField extends BaseField {
+  type: 'text' | 'number' | 'date' | 'tel';
+  label: string;
+  placeholder?: string;
+}
+
+export interface SelectField extends BaseField {
+  type: 'select';
+  label: string;
+  options: string[];
+}
+
+export interface CurrencyField extends BaseField {
+  type: 'currency';
+  label: string;
+  placeholder?: string;
+}
+
+export interface TextareaField extends BaseField {
+  type: 'textarea';
+  label: string;
+  placeholder?: string;
+}
+
+export interface YearlyFinancialsField extends BaseField {
+  type: 'yearlyFinancials';
+  years: number[];
+  subFields: string[];
+}
+export interface MultiSelectField extends BaseField {
+  type: 'multiselect';
+  label: string;
+  options: readonly string[];
+}
+
+export type FormField = TextField | SelectField | CurrencyField | TextareaField | YearlyFinancialsField | MultiSelectField;
+
+export interface FormStep {
+  id: string;
+  title: string;
+  description?: string;
+  fields: FormField[];
+}

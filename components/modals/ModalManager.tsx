@@ -9,6 +9,8 @@ import ConfirmQuitModal from './ConfirmQuitModal';
 import ConfirmDeleteAccountModal from './ConfirmDeleteAccountModal';
 import ProfileUpdateModal from './ProfileUpdateModal';
 import ConfirmPasswordUpdateModal from './ConfirmPasswordUpdateModal';
+import ValuationDetailModal from './ValuationDetailModal';
+import ValuationReportModal from './ValuationReportModal';
 
 export default function ModalManager() {
   return (
@@ -22,6 +24,8 @@ export default function ModalManager() {
       <ConfirmDeleteAccountModal/>
       <ProfileUpdateModal />
       <ConfirmPasswordUpdateModal />
+       <ValuationDetailModal />
+       <ValuationReportModal />
     </>
   );
 };

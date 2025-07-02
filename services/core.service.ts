@@ -1,5 +1,6 @@
 import { Eye, FileText, Link2, Target } from "lucide-react";
-
+import { ValuationHistoryItem } from '@/lib/types';
+// import api from './api';
 interface FeatureUsageData {
   name: string;
   value: number;
@@ -32,6 +33,11 @@ const mockFeaturesUsedData: FeatureUsageData[] = [
   { name: 'Fundability Test Score', value: 12, progress: 12, icon: FileText },
   { name: 'Listed Connections', value: 5, progress: 5, icon: Link2 },
   { name: 'Valuation Score', value: 40, progress: 40, icon: Target },
+];
+const mockValuationHistory: ValuationHistoryItem[] = [
+  { id: 'val_1', name: "Bowery Farming", type: 'Startup', method: 'Berkus Method', date: '14th June 2025', score: 78, status: 'Completed' },
+  { id: 'val_2', name: "Jumia CO.", type: 'SME', method: 'Cash Flow Method', date: '10th May 2025', score: 58, status: 'Completed' },
+  { id: 'val_3', name: "Innovate Capital", type: 'Startup', method: 'VC Method', date: '2nd April 2025', score: 92, status: 'Completed' },
 ];
 
 const mockFundabilityOverviewData: FundabilityOverviewData[] = [
@@ -90,6 +96,28 @@ class CoreService {
       setTimeout(() => {
         resolve(mockDashboardData);
       }, 500); 
+    });
+  }
+   async getValuationHistory(): Promise<ValuationHistoryItem[]> {
+    console.log("[CoreService] Fetching valuation history...");
+    // REAL API CALL: return (await api.get('/valuations/history')).data;
+    return new Promise(resolve => setTimeout(() => resolve(mockValuationHistory), 1000));
+  }
+
+  async submitValuationForm(data: any): Promise<{ score: number; reportData: any }> {
+    console.log("[CoreService] Calculating valuation from form data:", data);
+    
+    // MOCK CALCULATION LOGIC: This will be moved into the form component
+    // but the service simulates receiving data and returning a result.
+    const score = Math.floor(Math.random() * 40) + 50;
+    
+    return new Promise(resolve => {
+        setTimeout(() => {
+            resolve({
+                score,
+                reportData: { title: "Valuation Report", score, ...data }
+            });
+        }, 1500);
     });
   }
 }

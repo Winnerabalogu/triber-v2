@@ -11,7 +11,9 @@ export type ModalType =
   | 'confirm-quit'
   | 'confirm-delete-account'
   | 'profile-update-pending'
-  | 'confirm-password-update';
+  | 'confirm-password-update'
+  | 'valuation-history-details'
+  | 'valuation-report-preview';
 interface ModalData {
   [key: string]: any;
 }
