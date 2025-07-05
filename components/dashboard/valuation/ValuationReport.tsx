@@ -47,9 +47,8 @@ const StatusPill = ({ status }: { status: string }) => {
   return <span className={cn("px-2 py-1 text-xs font-medium rounded-full", color)}>{status}</span>
 }
 
-export default function ValuationReport({ data, onRestart }: ValuationReportProps) {
-  const { score, businessName } = data
-  const { score: valuationAmount, ...formData } = data
+export default function ValuationReport({ data, onRestart }: ValuationReportProps) {  
+  const { score: valuationAmount,businessName,type, ...formData } = data
   const scoreForGauge = Math.min(90, Math.floor((valuationAmount / 200000) * 100))
   const { openModal } = useModal()
 
@@ -84,7 +83,9 @@ export default function ValuationReport({ data, onRestart }: ValuationReportProp
           </div>
         </div>        
         <div className="md:col-span-2 bg-background p-8 rounded-lg border border-foreground/60 flex flex-col items-center justify-center">
+         <h3 className="font-bold mb-4 text-foreground">Valuation Score Chart</h3>
           <RadialScoreChart score={scoreForGauge} valuation={valuationAmount} />
+          <p className="text-sm text-muted-foreground mt-2">Valuation Score helps better understand company's sustainability maturity.</p>          
         </div>
       </div>
 
@@ -101,8 +102,7 @@ export default function ValuationReport({ data, onRestart }: ValuationReportProp
                   )}
                 />
                 <div>
-                  <h4 className="font-semibold text-foreground">{item.title}</h4>
-                  <p className="text-xs text-muted-foreground">{item.description}</p>
+                  <h4 className="font-semibold text-foreground">{item.title}</h4>                
                 </div>
               </div>
             ))}

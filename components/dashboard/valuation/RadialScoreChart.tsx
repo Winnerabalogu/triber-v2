@@ -47,10 +47,7 @@ export default function RadialScoreChart({ score, valuation }: RadialScoreChartP
   const yellowEndAngle = startAngle + (42 / 90) * totalAngle 
 
   return (
-    <div className="w-full max-w-sm mx-auto">
-      {/* Title */}
-      <h3 className="text-foreground font-semibold text-lg text-center mb-8">Valuation Score Chart</h3>
-
+    <div className="w-full max-w-sm mx-auto">    
       {/* Chart Container */}
       <div className="relative w-64 h-64 mx-auto">
         <svg className="absolute inset-0 w-full h-full" viewBox="0 0 200 200">
@@ -67,9 +64,7 @@ export default function RadialScoreChart({ score, valuation }: RadialScoreChartP
                 transition={{ duration: 1.5, ease: "circOut" }}
               />
             </mask>
-          </defs>
-
-          {/* Background track (muted) */}
+          </defs>          
           <g opacity="0.3">
             {/* Red segment (0-18) */}
             <path
@@ -153,14 +148,9 @@ export default function RadialScoreChart({ score, valuation }: RadialScoreChartP
           </div>
           <span className={cn("text-lg font-medium", color)}>{status}</span>
         </div>
-      </div>
-
-      {/* Bottom Text */}
-      <div className="text-center mt-8 space-y-4">
-        <p className="text-muted-foreground text-sm">Last assessed on March 24, 2023</p>
-        <p className="text-muted-foreground text-sm leading-relaxed max-w-xs mx-auto">
-          Valuation Score helps better understand company's sustainability maturity.
-        </p>
+      </div>      
+      <div className="text-center mt-8 space-y-2">
+        <p className="text-muted-foreground text-sm">Last assessed on March 24, 2023</p>        
       </div>
     </div>
   )

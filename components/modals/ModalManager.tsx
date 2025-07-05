@@ -11,6 +11,7 @@ import ProfileUpdateModal from './ProfileUpdateModal';
 import ConfirmPasswordUpdateModal from './ConfirmPasswordUpdateModal';
 import ValuationDetailModal from './ValuationDetailModal';
 import ValuationReportModal from './ValuationReportModal';
+import FundabilityDetailModal from './FundabilityDetailModal';
 
 export default function ModalManager() {
   return (
@@ -26,6 +27,7 @@ export default function ModalManager() {
       <ConfirmPasswordUpdateModal />
        <ValuationDetailModal />
        <ValuationReportModal />
+       <FundabilityDetailModal />
     </>
   );
 };

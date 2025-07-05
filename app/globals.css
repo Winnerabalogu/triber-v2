@@ -369,7 +369,7 @@ html {
     height: 200%;
     background: radial-gradient(
         circle,
-        var(--foreground/10),10%,
+        var(--foreground),10%,
         transparent 60%
     );
     transition: transform 0.6s ease;

@@ -1,5 +1,5 @@
 import { Eye, FileText, Link2, Target } from "lucide-react";
-import { ValuationHistoryItem } from '@/lib/types';
+import { FundabilityHistoryItem, ValuationHistoryItem } from '@/lib/types';
 // import api from './api';
 interface FeatureUsageData {
   name: string;
@@ -69,7 +69,6 @@ const mockBarChartData: BarChartItem[] = [
     { name: 'W4', views: 290 }, { name: 'W5', views: 500 }, { name: 'W6', views: 420 },
     { name: 'W7', views: 480 }, { name: 'W8', views: 290 }, { name: 'W9', views: 150 },
 ];
-// --- MOCK DATA ---
 const mockDashboardData = {
   introCards: [
     { title: "Ready to take your business to the next level", description: ["Complete the fundability test", "Get your valuation score in just a few clicks", "Go to the Deal Room to explore"], featured: true },
@@ -88,6 +87,10 @@ const mockDashboardData = {
   recentActivity: mockRecentActivity,
   barChartData: mockBarChartData,  
 };
+const mockFundabilityHistory: FundabilityHistoryItem[] = [
+    { id: 'fun_1', name: "Jumia CO. Fundability", type: 'SME', date: '15th July 2025', score: 88, status: 'Completed' },
+    { id: 'fun_2', name: "Bowery Farming Fundability", type: 'Startup', date: '1st July 2025', score: 72, status: 'Completed' },
+];
 
 class CoreService {
   async getDashboardData(): Promise<typeof mockDashboardData> {
@@ -120,6 +123,35 @@ class CoreService {
         }, 1500);
     });
   }
-}
 
+   async uploadDocument(file: File, onProgress: (progress: number) => void): Promise<{ success: boolean, url: string }> {
+        console.log(`[CoreService] Simulating upload for: ${file.name}`);
+        return new Promise(resolve => {
+            let progress = 0;
+            const interval = setInterval(() => {
+                progress += 20;
+                onProgress(progress);
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    console.log(`[CoreService] Upload complete for: ${file.name}`);
+                    resolve({ success: true, url: `/documents/${file.name}` });
+                }
+            }, 300); // Simulate progress every 300ms
+        });
+    }
+
+    async submitFundabilityTest(data: any): Promise<{ score: number, reportData: any }> {
+        console.log("[CoreService] Submitting fundability test data:", data);
+        const score = Math.floor(Math.random() * 30) + 60; 
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve({ score, reportData: { score, ...data } });
+            }, 1000);
+        });
+    }
+    async getFundabilityHistory(): Promise<FundabilityHistoryItem[]> {
+        console.log("[CoreService] Fetching fundability history...");
+        return new Promise(resolve => setTimeout(() => resolve(mockFundabilityHistory), 1000));
+    }
+}
 export default new CoreService();

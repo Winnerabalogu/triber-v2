@@ -10,7 +10,6 @@ const startupMethods = [
     { id: 'berkus', name: 'Berkus Method', description: 'A fairly simple valuation technique that can be used as a quick rule of thumb.' },
     { id: 'payne', name: 'Payne Method', description: 'Primarily meant to be used for early stage, pre-revenue startups.' },
     { id: 'vc-rating', name: 'VC Rating | Venionaire', description: 'A detailed method often used by Venture Capitalists.' },
-    { id: 'free-cash-flow', name: 'Free Cash Flow', description: 'Focuses on the cash a company generates after accounting for cash outflows.' },
     { id: 'vc-method', name: 'VC Method', description: 'Another popular method used by venture funds to value pre-revenue companies.' },
     { id: 'first-chicago', name: 'First Chicago Method', description: 'Combines income and market approaches to create a valuation range.' },
 ];

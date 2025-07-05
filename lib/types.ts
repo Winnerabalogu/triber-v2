@@ -1,11 +1,15 @@
+// lib/types.ts
+
+// --- CORE TYPES (User, AuthResponse, etc.) ---
 
 export interface User {
   id: string;
-  firstName?: string; 
-  lastName?: string;  
+  firstName?: string;
+  lastName?: string;
   email: string;
   profileType: 'business' | 'investor';
-  
+
+  // Onboarding fields
   businessName?: string;
   businessType?: string;
   businessStatus?: string;
@@ -41,73 +45,37 @@ export interface ValuationHistoryItem {
   score: number;
   status: 'Completed' | 'Pending';
 }
-
-
-interface BaseField {
+export interface FundabilityHistoryItem {
+  id: string;
   name: string;
+  type: 'Startup' | 'SME';  
+  date: string;
+  score: number;
+  status: 'Completed' | 'Pending';
 }
 
-export interface TextField extends BaseField {
-  type: 'text' | 'number' | 'date' | 'tel';
-  label: string;
-  placeholder?: string;
-}
+interface BaseField { name: string; colSpan?: 1 | 2; }
+export interface TextField extends BaseField { type: 'text' | 'number' | 'date' | 'tel'; label: string; placeholder?: string; }
+export interface SelectField extends BaseField { type: 'select'; label: string; options: readonly string[]; }
+export interface CurrencyField extends BaseField { type: 'currency'; label: string; placeholder?: string; }
+export interface TextareaField extends BaseField { type: 'textarea'; label: string; placeholder?: string; }
+export interface MultiSelectField extends BaseField { type: 'multiselect'; label: string; options: readonly string[]; placeholder?: string; }
+export interface DocumentUploadField extends BaseField { type: 'documentUpload'; label: string; placeholder?: string; } 
 
-export interface SelectField extends BaseField {
-  type: 'select';
-  label: string;
-  options: readonly string[];
-}
+export type FormField =
+  | TextField | SelectField | CurrencyField | TextareaField | MultiSelectField | DocumentUploadField;
 
-export interface CurrencyField extends BaseField {
-  type: 'currency';
-  label: string;
-  placeholder?: string;
-}
+interface BaseFormStep { title: string; description?: string; }
 
-export interface TextareaField extends BaseField {
-  type: 'textarea';
-  label: string;
-  placeholder?: string;
-}
+// For Valuation
+export interface StandardFormStep extends BaseFormStep { id: 'confidential' | 'startup-metrics' | 'sme-metrics'; fields: FormField[]; }
+export interface SubSectionedFormStep extends BaseFormStep { id: 'financials' | 'sme-cashflow'; subSections: { id: string; title: string; fields: FormField[]; }[]; }
 
-export interface YearlyFinancialsField extends BaseField {
-  type: 'yearlyFinancials';
-  title: string;
-  description: string;
-  years: number[];
-  subFields: string[];
-}
-
-export interface MultiSelectField extends BaseField {
-  type: 'multiselect';
-  label: string;
-  options: readonly string[];
-}
-
-export type FormField = 
-  | TextField 
-  | SelectField 
-  | CurrencyField 
-  | TextareaField 
-  | MultiSelectField
-  | YearlyFinancialsField;
-export interface StandardFormStep {
-  id: 'confidential' | 'metrics'; 
-  title: string;
-  description?: string;
+//For Fundability Test
+export interface FundabilityFormStep extends BaseFormStep {
+  id: 'businessInfo' | 'financialInfo' | 'documentUpload';
   fields: FormField[];
 }
 
-export interface FinancialsFormStep {
-  id: 'financials'; 
-  title: string;
-  description?: string;
-  subSections: {
-      id: string;
-      title: string;
-      fields: FormField[];
-  }[];
-}
-
-export type AnyFormStep = StandardFormStep | FinancialsFormStep;
+// The final union now includes all possible step types across all forms
+export type AnyFormStep = StandardFormStep | SubSectionedFormStep | FundabilityFormStep;
