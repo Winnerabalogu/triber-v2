@@ -38,14 +38,14 @@ export default function ValuationLanding({ onStartTest }: ValuationLandingProps)
                 <InfoCard title="Why You Should Go To The Deal Room" description="Go to the Deal Room to explore active funding opportunities and connect with investors." />
             </div>
 
-            <div className="bg-background p-6 rounded-lg border border-foreground/60">
+            <div className="bg-background p-6 rounded-lg border border-foreground/60 liquid-glass-card shadow-md shadow-foreground/20">
                 <h2 className="text-xl font-bold mb-1 text-foreground">Take Valuation Test As:</h2>
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4">
-                    <div className="bg-background p-4 rounded-md border border-foreground/60 text-center">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-4 ">
+                    <div className="bg-background p-4 rounded-md border border-foreground/60 text-center liquid-glass-card shadow-md shadow-foreground/20">
                         <div className="relative aspect-video rounded-md overflow-hidden mb-4"><Image src="/placeholder.svg?text=Startup" layout="fill" alt="Startup Valuation"/></div>
                         <Button className="w-full" onClick={() => onStartTest('startup')}>Start Test for Startup</Button>
                     </div>
-                     <div className="bg-background p-4 rounded-md border border-foreground/60 text-center">
+                     <div className="bg-background p-4 rounded-md border border-foreground/60 text-center liquid-glass-card shadow-md shadow-foreground/20">
                         <div className="relative aspect-video rounded-md overflow-hidden mb-4"><Image src="/placeholder.svg?text=SME" layout="fill" alt="SME Valuation"/></div>
                         <Button className="w-full" onClick={() => onStartTest('sme')}>Start Test for SME</Button>
                     </div>
@@ -53,7 +53,7 @@ export default function ValuationLanding({ onStartTest }: ValuationLandingProps)
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                 <div className="bg-background p-6 rounded-lg border border-foreground/60">
+                 <div className="bg-background p-6 rounded-lg border border-foreground/60 liquid-glass-card shadow-md shadow-foreground/20">
                      <h3 className="font-bold text-foreground flex items-center gap-2 mb-4"><TrendingUp className="w-5 h-5 text-primary"/> Valuation History</h3>
                      {isLoading ? <p className="text-sm text-muted-foreground">Loading history...</p> : (
                         <div className="space-y-3">
@@ -76,7 +76,7 @@ export default function ValuationLanding({ onStartTest }: ValuationLandingProps)
                         </div>
                      )}
                  </div>
-                 <div className="bg-background p-6 rounded-lg border border-foreground/60">
+                 <div className="bg-background p-6 rounded-lg border border-foreground/60 liquid-glass-card shadow-md shadow-foreground/20">
                     <h3 className="font-bold text-foreground flex items-center gap-2 mb-4"><FileClock className="w-5 h-5 text-yellow-500"/> Pending Results</h3>
                     <p className="text-sm text-muted-foreground">You have no pending valuation results.</p>
                  </div>
