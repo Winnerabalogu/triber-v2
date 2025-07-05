@@ -82,10 +82,10 @@ export default function ValuationReport({ data, onRestart }: ValuationReportProp
             ))}
           </div>
         </div>        
-        <div className="md:col-span-2 bg-background p-8 rounded-lg border border-foreground/60 flex flex-col items-center justify-center">
+         <div className="md:col-span-2 bg-background p-6 rounded-lg border border-foreground/60 flex flex-col items-center justify-center text-center">
          <h3 className="font-bold mb-4 text-foreground">Valuation Score Chart</h3>
           <RadialScoreChart score={scoreForGauge} valuation={valuationAmount} />
-          <p className="text-sm text-muted-foreground mt-2">Valuation Score helps better understand company's sustainability maturity.</p>          
+          <p className="text-sm text-muted-foreground mt-4 max-w-xs mx-auto">Valuation Score helps better understand company's sustainability maturity.</p>          
         </div>
       </div>
 
