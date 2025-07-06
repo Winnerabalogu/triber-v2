@@ -7,7 +7,6 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import CurrencyInput from "@/components/ui/currency-input";
-import MultiSelectCheckbox from "@/components/ui/multi-select-checkbox"; 
 import { AnyFormStep, FormField } from "@/lib/types";
 import InfoCard from '../../InfoCard';
 import DocumentUploadField from "./DocumentUploadField";
@@ -28,7 +27,7 @@ const financialInfoStep: AnyFormStep = {
     id: 'financialInfo', title: 'Financial Information',
     fields: [
         { name: 'arr_ttm_1', label: 'Company ARR/TTM (Average Annual Revenue)', type: 'currency', placeholder: '' },
-        { name: 'arr_ttm_2', label: 'Company ARR/TTM (Average Annual Revenue)', type: 'currency', placeholder: '' }, // As per design
+        { name: 'arr_ttm_2', label: 'Revenue Growth Rate(%)', type: 'number', placeholder: '' }, // As per design
         { name: 'investmentAmount', label: 'Investment Amount', type: 'currency', placeholder: '' },
         { name: 'hasAuditedFinancials', label: 'Do you have an audited financial statement?', type: 'select', options: ['Yes', 'No'] },
         { name: 'hasPitchDeck', label: 'Do you have a company pitch deck?', type: 'select', options: ['Yes', 'No'] },

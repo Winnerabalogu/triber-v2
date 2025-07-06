@@ -136,7 +136,7 @@ class CoreService {
                     console.log(`[CoreService] Upload complete for: ${file.name}`);
                     resolve({ success: true, url: `/documents/${file.name}` });
                 }
-            }, 300); // Simulate progress every 300ms
+            }, 300);
         });
     }
 
@@ -153,5 +153,29 @@ class CoreService {
         console.log("[CoreService] Fetching fundability history...");
         return new Promise(resolve => setTimeout(() => resolve(mockFundabilityHistory), 1000));
     }
+     getFundingRecommendations(formData: any): string[] {
+        const recommendations: string[] = [];
+        const score = formData.score || 0; 
+      
+        if (score < 60) {
+            recommendations.push("Your business shows moderate fundability. Consider angel investors, government grants, or asset-backed loans.");
+        } else if (score < 85) {
+            recommendations.push("Your business is attractive to a range of investors. Focus on networking with VCs and preparing for due diligence.");
+        } else {
+            recommendations.push("Your business has high fundability. You are in a strong position to negotiate terms with top-tier investors.");
+        }
+        if (formData.hasAuditedFinancials === 'No') {
+            recommendations.push("Improving your documentation by getting audited financial statements could significantly increase your funding options.");
+        }
+        if (formData.hasBusinessPlan === 'No') {
+            recommendations.push("Develop a comprehensive business plan to clearly articulate your vision and strategy to investors.");
+        }
+        if (Number(String(formData.arr_ttm_1 || '0').replace(/,/g, '')) < 50000) {
+            recommendations.push("Focus on increasing your Annual Recurring Revenue to demonstrate market traction and product-market fit.");
+        }
+
+        return recommendations.slice(0, 2); 
+    }
 }
+
 export default new CoreService();
