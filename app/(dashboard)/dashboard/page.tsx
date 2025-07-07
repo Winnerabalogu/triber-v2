@@ -9,7 +9,6 @@ import TodosSection from '@/components/dashboard/index/TodosSection';
 import AnalyticsSection from '@/components/dashboard/index/AnalyticsSection';
 import RecentActivitySection from '@/components/dashboard/index/RecentActivitySection';
 
-// Updated interface to match our new data structure
 interface DashboardData {
     stats: any[];
     featuresUsed: any[];
@@ -25,10 +24,9 @@ export default function DashboardPage() {
 
     useEffect(() => {
         const fetchData = async () => {
-            if (!user) return; // Don't fetch if there's no user
+            if (!user) return; 
             setIsLoading(true);
-            try {
-                // Pass the user object to our new "dashboard brain"
+            try {               
                 const data = await CoreService.getDashboardData(user);
                 setDashboardData(data);
             } catch (error) {
@@ -38,7 +36,7 @@ export default function DashboardPage() {
             }
         };
         fetchData();
-    }, [user]); // Re-run this effect if the user object changes
+    }, [user]); 
 
     if (isLoading) {
         return <div className="text-center p-10">Loading Dashboard...</div>;
@@ -50,17 +48,14 @@ export default function DashboardPage() {
     
     return (
         <div className="space-y-3">
-            <IntroCardsSection />
-            {/* Pass the new dynamic stats to the StatsCardsSection */}
+            <IntroCardsSection />            
             <StatsCardsSection stats={dashboardData.stats} />
-            <TodosSection user={user} />
-            
+            <TodosSection user={user} />            
             <AnalyticsSection 
                 featuresUsed={dashboardData.featuresUsed} 
                 fundabilityOverview={dashboardData.fundabilityOverview} 
                 barChartData={dashboardData.barChartData}
-            />
-            
+            />            
             <RecentActivitySection recentActivity={dashboardData.recentActivity} />
         </div>
     );
