@@ -4,7 +4,7 @@ import { useState } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import { Paperclip, Send } from "lucide-react";
-// We can implement the file upload dropdown later
+//implement the file upload dropdown later
 // import { DropdownMenu, DropdownMenuTrigger, ... } from "@/components/ui/dropdown-menu";
 
 interface ChatInputProps {

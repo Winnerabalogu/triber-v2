@@ -13,8 +13,7 @@ interface ChatMessagesProps {
 export default function ChatMessages({ messages }: ChatMessagesProps) {
   const { user } = useAuth();
   const scrollRef = useRef<HTMLDivElement>(null);
-
-  // Automatically scroll to the bottom when new messages are added
+  
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
