@@ -92,7 +92,7 @@ export default function ChatFileUploadModal() {
         )}
 
         <DialogFooter className="mt-4">
-            <Button onClick={handleClose} variant="outline">Cancel</Button>
+           <Button onClick={handleClose} variant="outline" className="mt-2 sm:mt-0">Cancel</Button>
             <Button onClick={handleUpload} disabled={!file || isUploading}>
               {isUploading ? <Loader2 className="w-4 h-4 mr-2 animate-spin"/> : null}
               {uploadProgress === 100 ? 'Complete' : 'Upload & Send'}
