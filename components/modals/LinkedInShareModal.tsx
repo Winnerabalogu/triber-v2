@@ -1,13 +1,12 @@
-// components/modals/LinkedInShareModal.tsx
 "use client"
 
 import React, { useState } from 'react';
 import { useModal } from '@/contexts/ModalContext';
-import { useToast } from "@/components/ui/use-toast"; // Assuming shadcn/ui toast
+import { useToast } from "@/components/ui/use-toast";
 import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
-import { Textarea } from '@/components/ui/textarea'; // Assuming shadcn/ui textarea
+import { Textarea } from '@/components/ui/textarea';
 import { Share2, Copy, ExternalLink } from 'lucide-react';
 
 export default function LinkedInShareModal() {
@@ -15,16 +14,13 @@ export default function LinkedInShareModal() {
   const { toast } = useToast();
   const [customMessage, setCustomMessage] = useState('');
 
-  // This modal doesn't need specific modalData, so we just check the type.
   if (modalType !== 'linkedin-share') return null;
-
-  // A new default message relevant to job seeking at Triber.
+  
   const defaultMessage = `I'm exploring career opportunities at Triber, a company with an amazing employee-centred culture. If you're looking for a great team, check out their open positions! #Triber #Careers #Hiring`;
 
   const finalMessage = customMessage || defaultMessage;
 
-  const handleShare = () => {
-    // We construct the URL with the final message. The URL can point to your careers page.
+  const handleShare = () => {    
     const linkedInUrl = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent('https://your-website.com/careers')}&summary=${encodeURIComponent(finalMessage)}`;
     window.open(linkedInUrl, '_blank');
     toast({

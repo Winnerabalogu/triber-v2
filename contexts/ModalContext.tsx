@@ -16,7 +16,8 @@ export type ModalType =
   | 'download-report-preview'
   | 'fundability-history-details'
   | 'edit-field'
-   | 'send-proposal';
+  | 'send-proposal'
+  | 'chat-file-upload';
 interface ModalData {
   [key: string]: any;
 }

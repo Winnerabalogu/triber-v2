@@ -21,7 +21,7 @@ export default function ChatMessages({ messages }: ChatMessagesProps) {
   }, [messages]);
 
   return (
-    <div ref={scrollRef} className="flex-grow p-4 md:p-6 overflow-y-auto">
+    <div ref={scrollRef} className="flex-grow p-4 md:p-6 overflow-y-auto scrollbar-hide">
       <div className="flex flex-col gap-4">
         <AnimatePresence>
           {messages.map((message) => (

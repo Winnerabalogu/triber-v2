@@ -1,4 +1,3 @@
-// components/modals/ProfileUpdateModal.tsx
 "use client"
 
 import { useModal } from "@/contexts/ModalContext";

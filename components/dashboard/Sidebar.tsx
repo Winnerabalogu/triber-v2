@@ -11,7 +11,7 @@ const navItems = [
   { href: '/dashboard', label: 'Dashboard', icon: Home },
   { href: '/dashboard/fundability', label: 'Fundability Test', icon: Briefcase },
   { href: '/dashboard/valuation', label: 'Valuation', icon: BarChart },
-  { href: '/deal-room', label: 'Deal Room', icon: Banknote },
+  { href: '/dashboard/deal-room', label: 'Deal Room', icon: Banknote },
   { href: '/dashboard/analysis', label: 'Business Analysis', icon: Microscope },
 ];
 

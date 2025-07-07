@@ -29,7 +29,7 @@ export default function InvestorCard({ investor }: InvestorCardProps) {
         <p className="flex items-center gap-2"><Star className="w-4 h-4 text-primary"/> {investor.rating}/5 ({investor.reviewCount}) Avg. Platform Rating</p>
       </div>
 
-      <Link href={`/deal-room/${investor.id}`} className="mt-4 pt-3 border-t border-border text-sm font-semibold text-primary flex items-center justify-between hover:underline">
+      <Link href={`/dashboard/deal-room/${investor.id}`} className="mt-4 pt-3 border-t border-border text-sm font-semibold text-primary flex items-center justify-between hover:underline">
         View Profile
         <ArrowRight className="w-4 h-4" />
       </Link>

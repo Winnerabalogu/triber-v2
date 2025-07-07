@@ -17,15 +17,18 @@ export default function ChatInterface({ initialInvestor, initialConversation }: 
   const { user } = useAuth();
   const [messages, setMessages] = useState<ChatMessage[]>(initialConversation.messages);
   const [isSending, setIsSending] = useState(false);
-  
-  const handleSendMessage = async (content: string, type: 'text') => {
+  const handleSendMessage = async (content: string, type: 'text' | 'image' | 'file') => {
     if (!user) return;
-    setIsSending(true);
+   
+    if (type === 'text') {
+        setIsSending(true);
+    }
 
     const tempMessage: ChatMessage = {
         id: `temp_${Date.now()}`,
         senderId: user.id,
-        content, type,
+        content, 
+        type,
         timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
     };
     
@@ -34,21 +37,24 @@ export default function ChatInterface({ initialInvestor, initialConversation }: 
     try {
         const sentMessage = await ChatService.sendMessage(initialConversation.id, {
             senderId: user.id,
-            content, type,
+            content, 
+            type, 
             timestamp: tempMessage.timestamp,
         });
-                
+                        
         setMessages(prev => prev.map(msg => msg.id === tempMessage.id ? sentMessage : msg));
     } catch (error) {
-        console.error("Failed to send message", error);    
+        console.error("Failed to send message", error);        
         setMessages(prev => prev.filter(msg => msg.id !== tempMessage.id)); 
     } finally {
-        setIsSending(false);
+        if (type === 'text') {
+            setIsSending(false);
+        }
     }
   };
     
      return (
-    <div className="h-[calc(100vh-120px)] flex flex-col bg-background border border-border rounded-xl shadow-lg">
+    <div className="h-[calc(100vh-160px)] flex flex-col bg-background border border-foreground/60 rounded-xl shadow-lg">
         <ChatHeader investor={initialInvestor} />
         <ChatMessages messages={messages} />
         <ChatInput onSendMessage={handleSendMessage} isLoading={isSending} />

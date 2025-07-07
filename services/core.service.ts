@@ -280,6 +280,20 @@ class CoreService {
         // const response = await api.post('/proposals', proposalData);
         // return response.data;
     }
+     async toggleInvestorWishlist(investorId: string, isWishlisted: boolean): Promise<{ success: boolean }> {
+        if (isWishlisted) {
+            console.log(`[CoreService] Removing investor ${investorId} from wishlist.`);
+        } else {
+            console.log(`[CoreService] Adding investor ${investorId} to wishlist.`);
+        }
+
+        // MOCK API: Just returns success
+        return new Promise(resolve => {
+            setTimeout(() => {
+                resolve({ success: true });
+            }, 500);
+        });
+    }
 }
 
 export default new CoreService();

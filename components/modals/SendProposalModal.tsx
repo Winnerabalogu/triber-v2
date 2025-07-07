@@ -92,7 +92,7 @@ export default function SendProposalModal() {
              <Label>Attach Pitch Deck</Label>
              <p className="text-xs text-muted-foreground">Please upload your pitch deck in PDF format, max size 5MB.</p>
              <DocumentUploadField 
-                label="" // The label is handled above
+                label=""
                 onUploadComplete={(fileName) => setPitchDeckFile(fileName)} 
               />
           </div>
@@ -103,8 +103,8 @@ export default function SendProposalModal() {
               Cancel
             </Button>
           </DialogClose>
-          <Button type="button" onClick={handleSubmit} disabled={isLoading}>
-            {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+          <Button type="button" onClick={handleSubmit} disabled={isLoading}  className="mb-2 text-white">
+            {isLoading && <Loader2 className="mr-2 h-4 w-4  animate-spin" />}
             Send Proposal
           </Button>
         </DialogFooter>

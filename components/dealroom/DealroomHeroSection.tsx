@@ -107,10 +107,8 @@ export default function DealroomHeroSection() {
                 </div>
             </div>
           </div>
-
-          {/* --- MOBILE LAYOUT (Stacked & Improved) --- */}
-          <div className="lg:hidden">
-            {/* Top Text Section */}
+          
+          <div className="lg:hidden">            
             <div className="p-8 text-center animate-on-scroll animate-fadeInUp">
                 <div className="text-black text-sm font-semibold mb-4 tracking-wider">ONBOARDING</div>
                 <h1 className="text-3xl font-bold text-background mb-6 leading-tight">
@@ -132,8 +130,7 @@ export default function DealroomHeroSection() {
                          <div className="w-2.5 h-2.5 bg-yellow-500 rounded-full"></div>
                          <div className="w-2.5 h-2.5 bg-green-500 rounded-full"></div>
                       </div>
-                    </div>
-                    {/* IMPROVED Mobile Dashboard Content */}
+                    </div>                    
                     <div className="bg-gray-900 p-4">
                       <h3 className="text-white font-semibold text-lg mb-4">Active Deal Rooms</h3>
                       <div className="space-y-4">

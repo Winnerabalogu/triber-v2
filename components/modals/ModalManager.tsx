@@ -14,6 +14,7 @@ import DownloadReportModal from './DownloadReportModal';
 import FundabilityDetailModal from './FundabilityDetailModal';
 import EditFieldModal from './EditFieldModal';
 import SendProposalModal from './SendProposalModal';
+import ChatFileUploadModal from './ChatFileUploadModal';
 
 export default function ModalManager() {
   return (
@@ -32,6 +33,7 @@ export default function ModalManager() {
        <FundabilityDetailModal />
        <EditFieldModal />
        <SendProposalModal />
+       <ChatFileUploadModal />
     </>
   );
 };

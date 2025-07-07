@@ -37,8 +37,8 @@ export default function MessageBubble({ message, isCurrentUser }: MessageBubbleP
           />
         );
       case 'file':
-        return <p>File: {message.content}</p>; // Placeholder for file type
-      default: // 'text'
+        return <p>File: {message.content}</p>; 
+      default: 
         return <p className="text-sm break-words">{message.content}</p>;
     }
   }

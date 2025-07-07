@@ -49,7 +49,7 @@ export interface AuthResponse {
 }
 export interface ChatMessage {
   id: string;
-  senderId: string; // Will be 'user_123' (our business) or 'inv_1' (the investor)
+  senderId: string
   content: string;
   timestamp: string;
   type: 'text' | 'image' | 'file';
