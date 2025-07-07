@@ -26,12 +26,43 @@ export interface User {
   isValuationComplete: boolean;
   isProposalProcessStarted: boolean;
 }
-
+export interface Investor {
+  id: string;
+  name: string;
+  company: string;
+  updatedAt: string;
+  summary: string;
+  locations: string[];
+  fundsUnderManagement: number;
+  rating: number;
+  reviewCount: number;
+  investorType: 'VC' | 'Angel' | 'Corporate' | 'PE Firm';
+  industryPreferences: string[];
+  investmentSize: { min: number; max: number; };
+  avatarUrl: string;
+  isVerified: boolean;
+  professionalSummary: string;
+}
 export interface AuthResponse {
   token: string;
   user: User;
 }
+export interface ChatMessage {
+  id: string;
+  senderId: string; // Will be 'user_123' (our business) or 'inv_1' (the investor)
+  content: string;
+  timestamp: string;
+  type: 'text' | 'image' | 'file';
+}
 
+export interface ChatConversation {
+  id: string; 
+  participants: {
+    userId: string;
+    investorId: string;
+  };
+  messages: ChatMessage[];
+}
 export interface ValuationHistoryItem {
   id: string;
   name: string;

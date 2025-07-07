@@ -1,13 +1,11 @@
-// components/ThemeToggleButton.tsx
 "use client"
 
 import { useState, useEffect } from "react"
 import { useTheme } from "next-themes"
 import { Moon, Sun } from "lucide-react"
 import { motion, AnimatePresence } from "framer-motion"
-import { cn } from "@/lib/utils" // Assuming you use this
+import { cn } from "@/lib/utils" 
 
-// Define the props, including the new optional variant
 interface ThemeToggleButtonProps {
   variant?: 'floating' | 'icon';
   className?: string;
@@ -46,8 +44,7 @@ export default function ThemeToggleButton({ variant = 'floating', className }: T
       className={cn(buttonClasses, "focus:outline-none focus:ring-2 focus:ring-ring transition-all duration-300", className)}
       aria-label={`Switch to ${resolvedTheme === "dark" ? "light" : "dark"} mode`}
       whileHover={{ scale: 1.1 }}
-      whileTap={{ scale: 0.95 }}
-      // Use resolvedTheme as key to re-trigger animation on theme change
+      whileTap={{ scale: 0.95 }}      
       key={`${resolvedTheme}-${variant}`}
       initial={{ opacity: 0, scale: 0.9 }}
       animate={{ opacity: 1, scale: 1 }}

@@ -1,5 +1,4 @@
-// app/ClientLayout.tsx
-"use client"; // This is our new client boundary
+"use client";
 
 import type React from "react";
 import { usePathname } from 'next/navigation';

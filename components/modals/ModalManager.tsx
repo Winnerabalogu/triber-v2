@@ -13,6 +13,7 @@ import ValuationDetailModal from './ValuationDetailModal';
 import DownloadReportModal from './DownloadReportModal'; 
 import FundabilityDetailModal from './FundabilityDetailModal';
 import EditFieldModal from './EditFieldModal';
+import SendProposalModal from './SendProposalModal';
 
 export default function ModalManager() {
   return (
@@ -30,6 +31,7 @@ export default function ModalManager() {
        <DownloadReportModal />
        <FundabilityDetailModal />
        <EditFieldModal />
+       <SendProposalModal />
     </>
   );
 };

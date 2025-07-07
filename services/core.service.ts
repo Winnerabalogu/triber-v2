@@ -1,5 +1,5 @@
 import { Eye, FileText, Link2, Target } from "lucide-react";
-import { FundabilityHistoryItem, User, ValuationHistoryItem } from '@/lib/types';
+import { FundabilityHistoryItem, Investor, User, ValuationHistoryItem } from '@/lib/types';
 import FundabilityCalculator from './fundabilityCalculator.service';
 // import api from './api';
 interface FeatureUsageData {
@@ -26,6 +26,16 @@ interface ActivityData {
 interface BarChartItem {
     name: string;
     views: number;
+}
+const mockInvestors: Investor[] = [
+  { id: 'inv_1', name: 'Amina Halim', company: 'Helios Investors', updatedAt: 'Jan 4', summary: 'Focused on high-growth technology and consumer goods across Africa.', locations: ['Lagos', 'Nairobi'], fundsUnderManagement: 750000000, rating: 4.8, reviewCount: 192, investorType: 'PE Firm', industryPreferences: ['Fintech', 'Retail', 'Logistics'], investmentSize: { min: 5000000, max: 20000000 }, avatarUrl: '/avatars/investor1.png', isVerified: true, professionalSummary: 'Helios Investors is one of the largest Africa-focused private investment firms, with a track record of building profitable and sustainable businesses.' },
+  { id: 'inv_2', name: 'Babatunde Cole', company: 'EchoVC Partners', updatedAt: 'Jan 2', summary: 'Seed and early-stage venture capital for tech startups building the future.', locations: ['Lagos', 'Accra'], fundsUnderManagement: 50000000, rating: 4.5, reviewCount: 130, investorType: 'VC', industryPreferences: ['SaaS', 'AI', 'Healthcare'], investmentSize: { min: 100000, max: 1000000 }, avatarUrl: '/avatars/investor2.png', isVerified: true, professionalSummary: 'EchoVC Partners invests in underrepresented founders and underserved markets.' },
+  { id: 'inv_3', name: 'Chidinma Okoro', company: 'TLcom Capital', updatedAt: 'Dec 28', summary: 'Investing in tech-enabled solutions for Africa’s biggest challenges.', locations: ['London', 'Lagos'], fundsUnderManagement: 150000000, rating: 4.6, reviewCount: 210, investorType: 'VC', industryPreferences: ['Education', 'Energy', 'Fintech'], investmentSize: { min: 500000, max: 5000000 }, avatarUrl: '/avatars/investor3.png', isVerified: false, professionalSummary: 'TLcom Capital is a venture capital firm with a focus on technology-enabled services and innovation for Sub-Saharan Africa.' },
+  { id: 'inv_4', name: 'David Adeboye', company: 'Savannah Fund', updatedAt: 'Dec 22', summary: 'Early-stage fund backing Africa\'s most ambitious founders.', locations: ['Cape Town', 'Lagos'], fundsUnderManagement: 25000000, rating: 4.2, reviewCount: 88, investorType: 'Angel', industryPreferences: ['Marketplace', 'eCommerce', 'Media'], investmentSize: { min: 25000, max: 250000 }, avatarUrl: '/avatars/investor4.png', isVerified: true, professionalSummary: 'Savannah Fund is a seed capital fund specializing in US$25,000–US$500,000 investments in early-stage high-growth technology startups in sub-Saharan Africa.'},
+  // ... I would add 10-15 more diverse investors here to ensure a full page
+];
+for (let i = 5; i <= 20; i++) {
+  mockInvestors.push({ ...mockInvestors[i % 4], id: `inv_${i}`, name: `Investor ${i}`, company: `Capital Firm ${i}` });
 }
 
 
@@ -233,6 +243,42 @@ class CoreService {
         }
 
         return recommendations.slice(0, 2); 
+    }
+
+   async getInvestors(filters: { name?: string; location?: string; industry?: string; investorType?: string; }): Promise<{ investors: Investor[], total: number }> {
+        console.log("[CoreService] Fetching investors with filters:", filters);
+        let filteredInvestors = mockInvestors.filter(inv => {
+            const nameMatch = !filters.name || inv.name.toLowerCase().includes(filters.name.toLowerCase()) || inv.company.toLowerCase().includes(filters.name.toLowerCase());
+            const locationMatch = !filters.location || inv.locations.includes(filters.location);
+            const industryMatch = !filters.industry || inv.industryPreferences.includes(filters.industry);
+            const typeMatch = !filters.investorType || inv.investorType === filters.investorType;
+            return nameMatch && locationMatch && industryMatch && typeMatch;
+        });
+        return new Promise(resolve => setTimeout(() => resolve({ investors: filteredInvestors, total: filteredInvestors.length }), 500));
+    }
+
+    async getInvestorById(id: string): Promise<Investor | undefined> {
+        console.log(`[CoreService] Fetching investor by ID: ${id}`);
+        return new Promise(resolve => setTimeout(() => resolve(mockInvestors.find(inv => inv.id === id)), 300));
+    }
+    async submitProposal(proposalData: any): Promise<{ success: boolean }> {
+        console.log("[CoreService] Submitting new proposal:", proposalData);
+
+        // MOCK API LOGIC
+        return new Promise((resolve, reject) => {
+            setTimeout(() => {
+                // Simulate a potential failure
+                if (!proposalData.toInvestorId) {
+                    return reject(new Error("Investor ID is missing."));
+                }
+                console.log("Proposal successfully logged on server.");
+                resolve({ success: true });
+            }, 1500); // Simulate network latency
+        });
+
+        // ** REAL API CALL **
+        // const response = await api.post('/proposals', proposalData);
+        // return response.data;
     }
 }
 

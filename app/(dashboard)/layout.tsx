@@ -1,5 +1,5 @@
 "use client";
-
+import { Toaster } from "@/components/ui/sonner"
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -27,7 +27,6 @@ export default function DashboardLayout({
     setIsMobileMenuOpen(!isMobileMenuOpen);
   };
 
-  // Framer Motion variants remain unchanged
   const backdropVariants = {
     hidden: { opacity: 0 },
     visible: { opacity: 1 },
@@ -77,6 +76,7 @@ export default function DashboardLayout({
         
         <main className="flex-1 overflow-y-auto p-6 scrollbar-hide pb-16">
           {children}
+          <Toaster richColors />
         </main>
       </div>
     </div>

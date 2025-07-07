@@ -15,7 +15,8 @@ export type ModalType =
   | 'valuation-history-details'
   | 'download-report-preview'
   | 'fundability-history-details'
-  | 'edit-field';
+  | 'edit-field'
+   | 'send-proposal';
 interface ModalData {
   [key: string]: any;
 }

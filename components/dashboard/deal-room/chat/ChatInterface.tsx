@@ -1,0 +1,57 @@
+"use client"
+
+import { useState } from 'react';
+import { Investor, ChatConversation, ChatMessage } from '@/lib/types';
+import { useAuth } from '@/contexts/AuthContext';
+import ChatService from '@/services/chat.service';
+import ChatHeader from './ChatHeader';
+import ChatMessages from './ChatMessages';
+import ChatInput from './ChatInput';
+
+interface ChatInterfaceProps {
+  initialInvestor: Investor;
+  initialConversation: ChatConversation;
+}
+
+export default function ChatInterface({ initialInvestor, initialConversation }: ChatInterfaceProps) {
+  const { user } = useAuth();
+  const [messages, setMessages] = useState<ChatMessage[]>(initialConversation.messages);
+  const [isSending, setIsSending] = useState(false);
+  
+  const handleSendMessage = async (content: string, type: 'text') => {
+    if (!user) return;
+    setIsSending(true);
+
+    const tempMessage: ChatMessage = {
+        id: `temp_${Date.now()}`,
+        senderId: user.id,
+        content, type,
+        timestamp: new Date().toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: false }),
+    };
+    
+    setMessages(prev => [...prev, tempMessage]);
+
+    try {
+        const sentMessage = await ChatService.sendMessage(initialConversation.id, {
+            senderId: user.id,
+            content, type,
+            timestamp: tempMessage.timestamp,
+        });
+                
+        setMessages(prev => prev.map(msg => msg.id === tempMessage.id ? sentMessage : msg));
+    } catch (error) {
+        console.error("Failed to send message", error);    
+        setMessages(prev => prev.filter(msg => msg.id !== tempMessage.id)); 
+    } finally {
+        setIsSending(false);
+    }
+  };
+    
+     return (
+    <div className="h-[calc(100vh-120px)] flex flex-col bg-background border border-border rounded-xl shadow-lg">
+        <ChatHeader investor={initialInvestor} />
+        <ChatMessages messages={messages} />
+        <ChatInput onSendMessage={handleSendMessage} isLoading={isSending} />
+    </div>
+  );
+}
