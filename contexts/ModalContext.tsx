@@ -13,8 +13,9 @@ export type ModalType =
   | 'profile-update-pending'
   | 'confirm-password-update'
   | 'valuation-history-details'
-  | 'valuation-report-preview'
-  | 'fundability-history-details';
+  | 'download-report-preview'
+  | 'fundability-history-details'
+  | 'edit-field';
 interface ModalData {
   [key: string]: any;
 }

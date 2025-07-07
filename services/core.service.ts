@@ -1,5 +1,6 @@
 import { Eye, FileText, Link2, Target } from "lucide-react";
 import { FundabilityHistoryItem, ValuationHistoryItem } from '@/lib/types';
+import FundabilityCalculator from './fundabilityCalculator.service';
 // import api from './api';
 interface FeatureUsageData {
   name: string;
@@ -140,15 +141,21 @@ class CoreService {
         });
     }
 
-    async submitFundabilityTest(data: any): Promise<{ score: number, reportData: any }> {
-        console.log("[CoreService] Submitting fundability test data:", data);
-        const score = Math.floor(Math.random() * 30) + 60; 
-        return new Promise(resolve => {
-            setTimeout(() => {
-                resolve({ score, reportData: { score, ...data } });
-            }, 1000);
-        });
-    }
+    async submitFundabilityTest(data: any): Promise<any> { 
+      console.log("[CoreService] Calculating fundability from test data:", data);
+         const { totalScore } = FundabilityCalculator.calculateAllScores(data);
+       return new Promise(resolve => {
+          setTimeout(() => {             
+              const reportData = {
+                  ...data,
+                  score: totalScore,
+              };
+              console.log("[CoreService] Test processed. Returning report data:", reportData);
+              resolve(reportData);
+          }, 1000);
+      });
+  }
+
     async getFundabilityHistory(): Promise<FundabilityHistoryItem[]> {
         console.log("[CoreService] Fetching fundability history...");
         return new Promise(resolve => setTimeout(() => resolve(mockFundabilityHistory), 1000));

@@ -59,7 +59,7 @@ export default function ValuationReport({ data, onRestart }: ValuationReportProp
           <h2 className="font-bold text-lg text-foreground">{businessName || "Bowery Farming"}</h2>
           <p className="text-sm text-muted-foreground">Food, Greentech, Agriculture</p>
         </div>
-        <Button onClick={() => openModal("valuation-report-preview", data)}>Download Report</Button>
+        <Button onClick={() => openModal("download-report-preview", data)}>Download Report</Button>
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-5 gap-6">

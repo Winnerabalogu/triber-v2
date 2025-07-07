@@ -1,4 +1,3 @@
-// app/(dashboard)/fundability/page.tsx
 "use client"
 
 import { useState } from 'react';
@@ -17,16 +16,16 @@ export default function FundabilityPage() {
     const [reportData, setReportData] = useState<any>(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    const handleStartTest = (type: TestType) => {
+     const handleStartTest = (type: TestType) => {
         setTestType(type);
         setStep('form');
     };
 
     const handleFormSubmit = async (formData: any) => {
         setIsLoading(true);
-        try {
+        try {           
             const result = await CoreService.submitFundabilityTest({ ...formData, testType });
-            setReportData(result);
+            setReportData(result); 
             setStep('report');
         } catch (error) {
             console.error("Fundability test submission failed", error);            

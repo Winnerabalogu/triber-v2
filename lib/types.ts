@@ -1,7 +1,3 @@
-// lib/types.ts
-
-// --- CORE TYPES (User, AuthResponse, etc.) ---
-
 export interface User {
   id: string;
   firstName?: string;
@@ -61,21 +57,28 @@ export interface CurrencyField extends BaseField { type: 'currency'; label: stri
 export interface TextareaField extends BaseField { type: 'textarea'; label: string; placeholder?: string; }
 export interface MultiSelectField extends BaseField { type: 'multiselect'; label: string; options: readonly string[]; placeholder?: string; }
 export interface DocumentUploadField extends BaseField { type: 'documentUpload'; label: string; placeholder?: string; } 
+export interface DisplayWithEditField extends BaseField {
+  type: 'display-with-edit';
+  label: string;
+  placeholder?: string;
+}
+export interface DynamicTextListField extends BaseField {
+  type?: 'dynamic-text-list';
+  label: string;
+  placeholder?: string;
+}
 
 export type FormField =
-  | TextField | SelectField | CurrencyField | TextareaField | MultiSelectField | DocumentUploadField;
+  | TextField | SelectField | CurrencyField | TextareaField | MultiSelectField | DocumentUploadField | DynamicTextListField | DisplayWithEditField;
 
 interface BaseFormStep { title: string; description?: string; }
 
-// For Valuation
 export interface StandardFormStep extends BaseFormStep { id: 'confidential' | 'startup-metrics' | 'sme-metrics'; fields: FormField[]; }
 export interface SubSectionedFormStep extends BaseFormStep { id: 'financials' | 'sme-cashflow'; subSections: { id: string; title: string; fields: FormField[]; }[]; }
 
-//For Fundability Test
 export interface FundabilityFormStep extends BaseFormStep {
-  id: 'businessInfo' | 'financialInfo' | 'documentUpload';
+  id: 'businessInfo' | 'financialInfo' | 'documentUpload' |'generalInfo';
   fields: FormField[];
 }
 
-// The final union now includes all possible step types across all forms
 export type AnyFormStep = StandardFormStep | SubSectionedFormStep | FundabilityFormStep;

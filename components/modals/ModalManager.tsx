@@ -10,8 +10,9 @@ import ConfirmDeleteAccountModal from './ConfirmDeleteAccountModal';
 import ProfileUpdateModal from './ProfileUpdateModal';
 import ConfirmPasswordUpdateModal from './ConfirmPasswordUpdateModal';
 import ValuationDetailModal from './ValuationDetailModal';
-import ValuationReportModal from './ValuationReportModal';
+import DownloadReportModal from './DownloadReportModal'; 
 import FundabilityDetailModal from './FundabilityDetailModal';
+import EditFieldModal from './EditFieldModal';
 
 export default function ModalManager() {
   return (
@@ -26,8 +27,9 @@ export default function ModalManager() {
       <ProfileUpdateModal />
       <ConfirmPasswordUpdateModal />
        <ValuationDetailModal />
-       <ValuationReportModal />
+       <DownloadReportModal />
        <FundabilityDetailModal />
+       <EditFieldModal />
     </>
   );
 };
