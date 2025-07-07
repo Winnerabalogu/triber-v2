@@ -1,5 +1,5 @@
 import { Eye, FileText, Link2, Target } from "lucide-react";
-import { FundabilityHistoryItem, ValuationHistoryItem } from '@/lib/types';
+import { FundabilityHistoryItem, User, ValuationHistoryItem } from '@/lib/types';
 import FundabilityCalculator from './fundabilityCalculator.service';
 // import api from './api';
 interface FeatureUsageData {
@@ -94,12 +94,63 @@ const mockFundabilityHistory: FundabilityHistoryItem[] = [
 ];
 
 class CoreService {
-  async getDashboardData(): Promise<typeof mockDashboardData> {
-    console.log("Fetching mock dashboard data...");
+
+  async getDashboardData(user: User | null): Promise<any> {
+    console.log("Constructing DYNAMIC dashboard data...");
+    
+    const [fundabilityHistory, valuationHistory] = await Promise.all([
+      this.getFundabilityHistory(),
+      this.getValuationHistory(),
+    ]);
+    
+    const latestFundabilityScore = fundabilityHistory[0]?.score || 0;
+    const latestValuationScore = valuationHistory[0]?.score || 0;
+    
+    const dynamicStats = [
+      { label: "Profile Views", value: 32, icon: Eye }, 
+      { label: "Fundability Test Score", value: latestFundabilityScore, icon: FileText },
+      { label: "Valuation Score", value: latestValuationScore, icon: Target },
+      { label: "Listed Connections", value: 5, icon: Link2 }, 
+    ];
+
+    const featuresUsed = dynamicStats.map(stat => ({
+        name: stat.label,
+        value: stat.value,
+        progress: stat.value, 
+        icon: stat.icon,
+    }));
+    
+    const fundabilityActivities = fundabilityHistory.map(item => ({
+      title: `Fundability Test: ${item.name}`,
+      status1: item.status,
+      status2: "Fundability",
+      date: item.date,
+      completion: 100,
+    }));
+    
+    const valuationActivities = valuationHistory.map(item => ({
+      title: `Valuation: ${item.name}`,
+      status1: item.status,
+      status2: "Valuation",
+      date: item.date,
+      completion: 100,
+    }));
+
+    const recentActivity = [...fundabilityActivities, ...valuationActivities]      
+      .sort((a, b) => b.date.localeCompare(a.date)) 
+      .slice(0, 5); 
+    
     return new Promise(resolve => {
       setTimeout(() => {
-        resolve(mockDashboardData);
-      }, 500); 
+        resolve({
+          stats: dynamicStats,
+          featuresUsed: featuresUsed,
+          recentActivity: recentActivity.length > 0 ? recentActivity : mockRecentActivity.slice(0, 3),                  
+          fundabilityOverview: mockFundabilityOverviewData,
+          barChartData: mockBarChartData,
+          introCards: mockDashboardData.introCards,
+        });
+      }, 500);
     });
   }
    async getValuationHistory(): Promise<ValuationHistoryItem[]> {
