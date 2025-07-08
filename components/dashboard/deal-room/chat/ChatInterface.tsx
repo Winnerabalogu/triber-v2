@@ -53,14 +53,11 @@ export default function ChatInterface({ initialInvestor, initialConversation }: 
     }
   };
     
-  return (
-  <div className="h-full flex flex-col bg-background border border-foreground/60 rounded-xl shadow-lg overflow-hidden">
-    <ChatHeader investor={initialInvestor} />        
-    <div className="flex-1 overflow-y-auto scrollbar-hide">
-      <ChatMessages messages={messages} />
-    </div>    
-    <ChatInput onSendMessage={handleSendMessage} isLoading={isSending} />
-  </div>
-);
-
+     return (
+    <div className="h-[calc(100vh-140px)] flex flex-col bg-background border border-foreground/60 rounded-xl shadow-lg">
+        <ChatHeader investor={initialInvestor} />
+        <ChatMessages messages={messages} />
+        <ChatInput onSendMessage={handleSendMessage} isLoading={isSending} />
+    </div>
+  );
 }
