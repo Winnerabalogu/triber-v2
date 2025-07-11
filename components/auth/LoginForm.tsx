@@ -1,102 +1,83 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { useFormState, useFormStatus } from "react-dom";
 import { useAuth } from "@/contexts/AuthContext";
-import AuthService from "@/services/auth.service";
+import { loginUser, LoginActionResult } from "@/lib/actions";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-import Preloader from "@/components/ui/Preloader"; 
+import Preloader from "@/components/ui/Preloader";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
+
+
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" className="w-full py-3" disabled={pending}>
+      {pending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+      {pending ? "Signing In..." : "Login"}
+    </Button>
+  );
+}
+
 export default function LoginForm() {
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [showPreloader, setShowPreloader] = useState(false);
-const { login, user, isLoggedIn, isLoading: authLoading, refreshUserProfile } = useAuth();
-
-
+  const { login, isLoading: authLoading } = useAuth();
   const router = useRouter();
 
-  if (authLoading || showPreloader) {
+  const initialState: LoginActionResult = { success: false, message: "" };
+  const [state, formAction] = useFormState(loginUser, initialState);
+
+  useEffect(() => {
+    if (state.success) {      
+      login(state.token, state.user); 
+      
+      if (state.user) {        
+        toast.success("Welcome back!");
+        router.push('/dashboard');
+      } else {        
+        toast.info("Welcome! Let's get your profile set up.");
+        router.push('/onboarding');
+      }
+    } else if (state.message) {
+      toast.error("Login Failed", { description: state.message });
+    }
+  }, [state, login, router]);
+
+  if (authLoading) {
     return <Preloader/>;
   }
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-    
-    try {
-      const { token, user } = await AuthService.login(email, password);
-      login(token, user);
-      // await refreshUserProfile();
-
-      setShowPreloader(true); 
-    
-      router.push("/dashboard");
-  } catch (err) {
-    console.error("Login failed:", err);
-    setError("Invalid email or password. Please try again.");
-    setIsLoading(false);
-  }
-  };
-
+      
   return (
     <div className="flex flex-col gap-6 w-full max-w-sm mx-auto">
       <div className="text-center">
         <h1 className="text-3xl font-bold">Welcome back</h1>
-        <p className="text-muted-foreground mt-2">
-          Enter your credentials to access your account.
-        </p>
+        <p className="text-muted-foreground mt-2">Enter your credentials to access your account.</p>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form action={formAction} className="space-y-4">
         <div>
-          <label className="text-sm font-medium" htmlFor="email">
-            Email
-          </label>
-          <Input
-            id="email"
-            type="email"
-            placeholder="name@company.com"
-            className="mt-1"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            disabled={isLoading}
-            required
-          />
+          <label className="text-sm font-medium" htmlFor="email">Email</label>          
+          <Input id="email" name="email" type="email" placeholder="name@company.com" className="mt-1" required />
         </div>
         <div>
-          <label className="text-sm font-medium" htmlFor="password">
-            Password
-          </label>
-          <Input
-            id="password"
-            type="password"
-            placeholder="••••••••••"
-            className="mt-1"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            disabled={isLoading}
-            required
-          />
-        </div>
-
-        {error && <p className="text-sm text-red-500">{error}</p>}
-
-        <Button
-          type="submit"
-          className="w-full py-3 bg-primary text-primary-foreground hover:bg-primary/90"
-          disabled={isLoading}
-        >
-          {isLoading ? "Signing In..." : "Login"}
-        </Button>
+          {/* --- FIX APPLIED HERE: Added a flex container for label and link --- */}
+          <div className="flex items-center justify-between">
+            <label className="text-sm font-medium" htmlFor="password">Password</label>
+            
+          </div>
+          <Input id="password" name="password" type="password" placeholder="••••••••••" className="mt-1" required />
+        </div>      
+        <Link href="/auth/forgot-password" className="text-sm font-medium text-primary hover:underline">
+              Forgot password?
+            </Link>          
+        <SubmitButton />
       </form>
-
+      
       <div className="text-center text-sm text-muted-foreground">
-        Don&apos;t have an account?{" "}
+        Don't have an account?{" "}
         <Link
           href="/auth/register"
           className="text-primary hover:underline font-medium"

@@ -1,70 +1,55 @@
 "use client"
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { useAuth } from "@/contexts/AuthContext";
-import AuthService from "@/services/auth.service";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Checkbox } from "@/components/ui/checkbox";
+import { toast } from "sonner";
+import { Loader2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useFormState, useFormStatus } from "react-dom";
+import { registerUser,ActionResult  } from "@/lib/actions";
 
+function SubmitButton() {
+  const { pending } = useFormStatus();
+  return (
+    <Button type="submit" disabled={pending} className="w-full py-3">
+      {pending && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+      {pending ? "Creating Account..." : "Sign Up"}
+    </Button>
+  );
+}
 interface RegisterFormProps {
   onTabChange: (tab: 'business' | 'investor') => void;
 }
 
 export default function RegisterForm({ onTabChange }: RegisterFormProps) {
-  const [activeTab, setActiveTab] = useState<'business' | 'investor'>('business');
-  const [formData, setFormData] = useState({
-    email: '',
-    password: '',
-    businessName: '',
-    firstName: '',
-    lastName: '',
-  });
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const { login } = useAuth();
-  const router = useRouter();
+  const router = useRouter();    
+   const initialState: ActionResult = { success: false, message: "" };  
+  const [state, formAction] = useFormState(registerUser, initialState);  
 
+  useEffect(() => {
+    if (state.success) {
+      toast.success("Registration Successful!", {
+        description: state.message,
+      });      
+      router.push(`/auth/verify-email?email=${state.email}`);
+    }     
+    else if (state.message) {
+      toast.error("Registration Failed", {
+        description: state.message,
+      });
+    }
+  }, [state, router]);
+
+  const [activeTab, setActiveTab] = useState<'business' | 'investor'>('business');  
+  
   const handleTabClick = (tab: 'business' | 'investor') => {
     setActiveTab(tab);
     onTabChange(tab);
-  };
-  
-  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData(prev => ({ ...prev, [e.target.name]: e.target.value }));
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setError(null);
-
-    try {   
-      const payload = {
-        email: formData.email,
-        password: formData.password,
-        profileType: activeTab,
-        ...(activeTab === 'business' 
-            ? { businessName: formData.businessName }
-            : { firstName: formData.firstName, lastName: formData.lastName }
-        ),
-      };
-      
-      const { token, user } = await AuthService.register(payload);
-      
-      login(token, user); 
-      router.push('/auth/onboarding'); 
-
-    } catch (err) {
-      console.error("Registration failed:", err);
-      setError(`${err}`);
-    } finally {
-      setIsLoading(false);
-    }
   };
 
   const formVariants = {
@@ -88,7 +73,7 @@ export default function RegisterForm({ onTabChange }: RegisterFormProps) {
         </Button>
       </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form action={formAction} className="space-y-4">
         <AnimatePresence mode="wait">
           <motion.div
             key={activeTab}
@@ -100,18 +85,18 @@ export default function RegisterForm({ onTabChange }: RegisterFormProps) {
           >
             {activeTab === 'business' ? (
               <div>
-                <label className="text-sm font-medium" htmlFor="businessName">Business Name</label>
-                <Input id="businessName" name="businessName" placeholder="e.g. Jumia" className="mt-1" value={formData.businessName} onChange={handleInputChange} required />
+               <label className="text-sm font-medium" htmlFor="businessName">Business Name</label>                
+                <Input id="businessName" name="businessName" placeholder="e.g. Jumia" className="mt-1" required />
               </div>
             ) : (
               <div className="grid grid-cols-2 gap-4">
                 <div>
                   <label className="text-sm font-medium" htmlFor="firstName">First Name</label>
-                  <Input id="firstName" name="firstName" placeholder="Matthew" className="mt-1" value={formData.firstName} onChange={handleInputChange} required />
+                  <Input id="firstName" name="firstName" placeholder="Matthew" className="mt-1" required />
                 </div>
                 <div>
                   <label className="text-sm font-medium" htmlFor="lastName">Last Name</label>
-                  <Input id="lastName" name="lastName" placeholder="Akanbi" className="mt-1" value={formData.lastName} onChange={handleInputChange} required />
+                  <Input id="lastName" name="lastName" placeholder="Akanbi" className="mt-1" required />
                 </div>
               </div>
             )}
@@ -119,13 +104,14 @@ export default function RegisterForm({ onTabChange }: RegisterFormProps) {
         </AnimatePresence>
 
         <div>
-          <label className="text-sm font-medium" htmlFor="email">Email</label>
-          <Input id="email" name="email" type="email" placeholder="name@flowbite.com" className="mt-1" value={formData.email} onChange={handleInputChange} required />
+           <label className="text-sm font-medium" htmlFor="email">Email</label>
+          <Input id="email" name="email" type="email" placeholder="name@company.com" className="mt-1" required />
         </div>
         <div>
           <label className="text-sm font-medium" htmlFor="password">Password</label>
-          <Input id="password" name="password" type="password" placeholder="••••••••••" className="mt-1" value={formData.password} onChange={handleInputChange} required />
+          <Input id="password" name="password" type="password" placeholder="••••••••••" className="mt-1" required minLength={6} />
         </div>
+
 
         <div className="space-y-4 pt-2">
           <div className="flex items-start space-x-3">
@@ -140,13 +126,8 @@ export default function RegisterForm({ onTabChange }: RegisterFormProps) {
                   Email me about product updates and resources.
               </label>
           </div>
-        </div>
-        
-        {error && <p className="text-sm text-red-500">{error}</p>}
-        
-        <Button type="submit" disabled={isLoading} className="w-full py-3 bg-primary text-primary-foreground hover:bg-primary/90">
-          {isLoading ? "Creating Account..." : "Sign Up"}
-        </Button>
+        </div>                        
+       <SubmitButton />
       </form>
 
       <div className="text-center text-sm text-muted-foreground">

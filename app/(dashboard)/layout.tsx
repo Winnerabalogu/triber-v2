@@ -6,27 +6,21 @@ import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '@/components/dashboard/Sidebar';
 import Header from '@/components/dashboard/Header';
 import { NotificationProvider } from '@/contexts/NotificationContext';
+import ProtectedRoute from '@/components/auth/ProtectedRoute';
 
-export default function DashboardLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function DashboardLayout({ children }: { children: React.ReactNode }) {
+  // --- PROVIDERS REMOVED FROM HERE ---
+  
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);  
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
-  
-  const pathname = usePathname();  
+  const pathname = usePathname();
+
   useEffect(() => {
     setIsMobileMenuOpen(false);
   }, [pathname]);
 
-  const toggleDesktopSidebar = () => {
-    setIsSidebarOpen(!isSidebarOpen);
-  };
-
-  const toggleMobileMenu = () => {
-    setIsMobileMenuOpen(!isMobileMenuOpen);
-  };
+  const toggleDesktopSidebar = () => setIsSidebarOpen(!isSidebarOpen);
+  const toggleMobileMenu = () => setIsMobileMenuOpen(!isMobileMenuOpen);
 
   const backdropVariants = {
     hidden: { opacity: 0 },
@@ -38,6 +32,8 @@ export default function DashboardLayout({
   };
 
   return (    
+    <ProtectedRoute>
+    
     <NotificationProvider>
     <div className="flex h-dvh bg-background">
       {/* Desktop Sidebar */}
@@ -83,6 +79,7 @@ export default function DashboardLayout({
         
       </div>
     </div>
-    </NotificationProvider>
+    </NotificationProvider>  
+    </ProtectedRoute>
   );
 }

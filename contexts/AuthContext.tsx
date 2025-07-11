@@ -1,24 +1,46 @@
 "use client";
 
-import React, {
-  createContext,
-  useState,
-  useEffect,
-  ReactNode,
-  useContext,
-} from "react";
+import React, { createContext, useState, useEffect, ReactNode, useContext } from "react";
 import { User, NotificationSettings } from "@/lib/types";
+import BusinessService from "@/services/business.service";
 import Preloader from "@/components/ui/Preloader";
+
+const mapApiBusinessToAppUser = (apiBusiness: any): User => {
+  const defaultSettings: NotificationSettings = {
+    'proposal-received': true, 'proposal-reviewed': true, 'message-received': true,
+    'launches': true, 'updates': false, 'newsletter': false,
+  };
+
+  return {
+    id: apiBusiness.publicId,
+    businessName: apiBusiness.businessName,
+    email: apiBusiness.businessEmail,
+    phoneNumber: apiBusiness.businessPhone,
+    businessStatus: apiBusiness.businessStatus,
+    interest: apiBusiness.interestedIn,
+    industry: apiBusiness.industry,
+    employeeCount: apiBusiness.numOfEmployees,
+    establishedDate: String(apiBusiness.yearEstablished),
+    businessAddress: apiBusiness.location,
+    businessDescription: apiBusiness.description,
+    legalIdentity: apiBusiness.businessLegalEntity,
+    profileType: 'business',
+    isProfileComplete: true,
+    notificationSettings: apiBusiness.notificationSettings ?? defaultSettings, 
+    isFundabilityTestTaken: false, isDealRoomProfileComplete: false,
+    isValuationComplete: false, isProposalProcessStarted: false,
+  };
+};
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  isLoading: boolean;  
-  login: (token: string, user: User) => void; 
-  logout: () => void;
+  isLoading: boolean;
   isLoggedIn: boolean;
-  refreshUserProfile: () => Promise<void>;  
-  updateNotificationSettings: (newSettings: NotificationSettings) => void;
+  login: (token: string, userProfile?: User | null) => void;
+  logout: () => void;
+  loadUserProfile: () => Promise<'profile_loaded' | 'needs_onboarding'>;
+  refreshUserProfile: () => Promise<void>; 
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -30,11 +52,9 @@ export const useAuth = () => {
   }
   return context;
 };
-
 interface AuthProviderProps {
   children: ReactNode;
 }
-
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
@@ -48,28 +68,38 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         setToken(storedToken);
         setUser(JSON.parse(storedUser));
       }
-    } catch (error) {
-      console.error("Failed to parse auth data from storage", error);
-      localStorage.removeItem("authToken");
-      localStorage.removeItem("user");
-    } finally {
-      setIsLoading(false);
-    }
+    } catch (error) { console.error("Failed to parse auth data", error); }
+    finally { setIsLoading(false); }
   }, []);
 
-  const login = (newToken: string, newUser: User) => {
+  const login = (newToken: string, userProfile: User | null = null) => {
     setToken(newToken);
-    setUser(newUser);
     localStorage.setItem("authToken", newToken);
-    localStorage.setItem("user", JSON.stringify(newUser));
+    if (userProfile) {
+        setUser(userProfile);
+        localStorage.setItem("user", JSON.stringify(userProfile));
+    } else {
+        setUser(null);
+        localStorage.removeItem("user");
+    }
   };
-  
-  // --- Function to handle settings updates ---
-  const updateNotificationSettings = (newSettings: NotificationSettings) => {
-    if (!user || !token) return;
 
-    const updatedUser = { ...user, notificationSettings: newSettings };    
-    login(token, updatedUser);
+  const loadUserProfile = async (): Promise<'profile_loaded' | 'needs_onboarding'> => {
+    try {
+        const businesses = await BusinessService.getMyBusinesses();
+        if (businesses && businesses.length > 0) {
+            const primaryBusiness = businesses[0];
+            const appUser = mapApiBusinessToAppUser(primaryBusiness);
+            setUser(appUser);
+            localStorage.setItem("user", JSON.stringify(appUser));
+            return 'profile_loaded';
+        } else {
+            return 'needs_onboarding';
+        }
+    } catch (error) {
+        console.error("Failed to load user profile:", error);
+        throw error;
+    }
   };
 
   const logout = () => {
@@ -79,8 +109,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.removeItem("user");
     window.location.href = "/auth/login";
   };
-
-  const refreshUserProfile = async () => {
+    const refreshUserProfile = async () => {
     if (!token) return;
 
     try {
@@ -102,15 +131,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-   const value: AuthContextType = {
+  const value: AuthContextType = {
     user,
     token,
     isLoading,
     login,
     logout,
-    isLoggedIn: !!user && !!token,
+    loadUserProfile,
     refreshUserProfile,
-    updateNotificationSettings, 
+    isLoggedIn: !!user && !!token && !!user.isProfileComplete,
   };
 
   return (

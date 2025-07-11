@@ -10,10 +10,10 @@ import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useRouter } from "next/navigation";
-import { CheckCircle } from "lucide-react";
+import { CheckCircle, Loader2 } from "lucide-react"; 
 import { useAuth } from "@/contexts/AuthContext";
-import AuthService from "@/services/auth.service";
-
+import BusinessService from '@/services/business.service';
+import { toast } from "sonner";
 
 const onboardingSteps = [
     { step: 1, name: "businessName", title: "Your business name", component: "text", placeholder: "e.g. Triber Inc.", validation: { required: true, minLength: 3 } },
@@ -37,15 +37,16 @@ const onboardingSteps = [
 
 const totalSteps = onboardingSteps.length;
 
-export default function OnboardingPage() {
+export default function Onboarding() { 
     const [isOnboardingActive, setIsOnboardingActive] = useState(false);
     const [currentStep, setCurrentStep] = useState(1);
     const [formData, setFormData] = useState<{ [key: string]: any }>({});
     const [direction, setDirection] = useState(1);
     const [error, setError] = useState<string | null>(null);
     const { openModal } = useModal();
-    const router = useRouter();
-    const { user, login } = useAuth()
+    const router = useRouter();        
+    const { loadUserProfile } = useAuth();
+    const [isSubmitting, setIsSubmitting] = useState(false);
 
     const handleStartOnboarding = () => setIsOnboardingActive(true);
 
@@ -81,36 +82,37 @@ export default function OnboardingPage() {
         return true;
     };
 
- const handleNext = async () => { // Make the function async
-        if (validateStep() || currentStep === 16) {
-            if (currentStep < totalSteps) {
-                // If we are on the summary step, this is the moment to submit the data
-                if (currentStep === totalSteps - 1) { // This is the "Submit" button
-                    if (!user) {
-                        console.error("No user found to update");
-                        return;
-                    }
-                    console.log("SUBMITTING ONBOARDING DATA:", formData);
-                    try {
-                        // Call the new service to update the user profile
-                        const updatedUser = await AuthService.updateUserProfile(user, formData);
-                        // Update the global user state with the complete profile
-                        login(localStorage.getItem('authToken')!, updatedUser);
-                    } catch (error) {
-                        console.error("Failed to update user profile", error);
-                        // Handle error state
-                    }
-                }
+ const handleNext = async () => {
+        if (currentStep === totalSteps - 1) { 
+            setIsSubmitting(true);
+            try {                
+                await BusinessService.createBusiness(formData, null); 
                 setDirection(1);
                 setCurrentStep(prev => prev + 1);
-            } else {
-                // This is the final button click on the success screen
-                console.log("Navigating to dashboard...");
-                router.push('/dashboard');
+
+            } catch (error: any) {
+                console.error("Failed to create business profile", error);
+                toast.error("Profile Creation Failed", {
+                    description: error.message || "There was a problem creating your profile. Please try again.",
+                });
+            } finally {
+                setIsSubmitting(false);
+            }
+        }         
+        else if (currentStep === totalSteps) {
+            toast.success("Welcome to Triber!", {
+                description: "Your business profile is now live.",
+            });            
+            await loadUserProfile();
+            router.push('/dashboard');
+        }         
+        else if (validateStep()) {
+            if (currentStep < totalSteps) {
+                setDirection(1);
+                setCurrentStep(prev => prev + 1);
             }
         }
     };
-
 
     const handlePrevious = () => {
         if (currentStep > 1) {
@@ -285,9 +287,12 @@ export default function OnboardingPage() {
                        {currentStep < (totalSteps -1) && ( 
                             <Button onClick={handleNext}>Next</Button>
                        )}
-                       {currentStep === (totalSteps - 1) && ( 
-                            <Button onClick={handleNext}>Submit</Button>
-                       )}
+                        {currentStep === (totalSteps - 1) && ( 
+                            <Button onClick={handleNext} disabled={isSubmitting}>
+                                {isSubmitting && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                                {isSubmitting ? "Submitting..." : "Submit"}
+                            </Button>
+                       )}                       
                        {currentStep === totalSteps && ( 
                             <Button onClick={handleNext} className="bg-primary text-primary-foreground">Go to Dashboard</Button>
                        )}

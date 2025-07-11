@@ -31,10 +31,7 @@ export default function OnboardingLayout({ currentStep, totalSteps, onCancel, ch
               transition={{ duration: 0.5, ease: "easeInOut" }}
             />
           </div>
-        </header>
-
-      
-      {/* --- STEP CONTENT --- */}      
+        </header>            
       <main className="flex-grow flex flex-col items-center justify-center p-4">
         <div className="w-full max-w-lg">
           {children}                    
