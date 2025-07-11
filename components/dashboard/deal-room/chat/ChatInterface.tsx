@@ -54,7 +54,7 @@ export default function ChatInterface({ initialInvestor, initialConversation }: 
   };
     
      return (
-    <div className="h-[calc(100vh-140px)] flex flex-col bg-background border border-foreground/60 rounded-xl shadow-lg">
+    <div className="h-[calc(100vh-120px)] flex flex-col bg-background border border-foreground/60 rounded-xl shadow-lg">
         <ChatHeader investor={initialInvestor} />
         <ChatMessages messages={messages} />
         <ChatInput onSendMessage={handleSendMessage} isLoading={isSending} />

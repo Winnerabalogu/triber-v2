@@ -5,6 +5,7 @@ import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
 import Sidebar from '@/components/dashboard/Sidebar';
 import Header from '@/components/dashboard/Header';
+import { NotificationProvider } from '@/contexts/NotificationContext';
 
 export default function DashboardLayout({
   children,
@@ -37,6 +38,7 @@ export default function DashboardLayout({
   };
 
   return (    
+    <NotificationProvider>
     <div className="flex h-dvh bg-background">
       {/* Desktop Sidebar */}
       <div className="hidden lg:flex flex-shrink-0">
@@ -78,7 +80,9 @@ export default function DashboardLayout({
           {children}
           <Toaster richColors />
         </main>
+        
       </div>
     </div>
+    </NotificationProvider>
   );
 }

@@ -4,6 +4,7 @@ import { Settings, Menu } from 'lucide-react';
 import { usePathname } from 'next/navigation';
 import ThemeToggleButton from '../ThemeToggleButton';
 import NotificationDropdown from './NotificationDropdown';
+import ProfileDropdown from './header/ProfileDropdown';
 
 interface HeaderProps {
   onDesktopMenuClick: () => void; 
@@ -38,9 +39,7 @@ export default function Header({ onDesktopMenuClick, onMobileMenuClick }: Header
             
       <div className="flex items-center gap-2">
            <ThemeToggleButton variant="icon" />
-        <button className="p-2 rounded-full hover:bg-muted">
-          <Settings className="w-5 h-5 text-muted-foreground" />
-        </button>
+       <ProfileDropdown />
         <NotificationDropdown />
       </div>
     </header>

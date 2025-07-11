@@ -7,17 +7,18 @@ import React, {
   ReactNode,
   useContext,
 } from "react";
-import { User } from "@/lib/types";
+import { User, NotificationSettings } from "@/lib/types";
 import Preloader from "@/components/ui/Preloader";
 
 interface AuthContextType {
   user: User | null;
   token: string | null;
-  isLoading: boolean;
-  login: (token: string, user: User) => void;
+  isLoading: boolean;  
+  login: (token: string, user: User) => void; 
   logout: () => void;
   isLoggedIn: boolean;
-  refreshUserProfile: () => Promise<void>;
+  refreshUserProfile: () => Promise<void>;  
+  updateNotificationSettings: (newSettings: NotificationSettings) => void;
 }
 
 export const AuthContext = createContext<AuthContextType | undefined>(undefined);
@@ -62,6 +63,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     localStorage.setItem("authToken", newToken);
     localStorage.setItem("user", JSON.stringify(newUser));
   };
+  
+  // --- Function to handle settings updates ---
+  const updateNotificationSettings = (newSettings: NotificationSettings) => {
+    if (!user || !token) return;
+
+    const updatedUser = { ...user, notificationSettings: newSettings };    
+    login(token, updatedUser);
+  };
 
   const logout = () => {
     setToken(null);
@@ -93,7 +102,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     }
   };
 
-  const value: AuthContextType = {
+   const value: AuthContextType = {
     user,
     token,
     isLoading,
@@ -101,6 +110,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     logout,
     isLoggedIn: !!user && !!token,
     refreshUserProfile,
+    updateNotificationSettings, 
   };
 
   return (

@@ -1,4 +1,4 @@
-import { AuthResponse, User } from '@/lib/types';
+import { AuthResponse, NotificationSettings, User } from '@/lib/types';
 import api from './api';
 
 // --- TYPES for this service ---
@@ -16,6 +16,16 @@ type RegisterPayload = {
 // This allows a user to register, log out, and log back in with their created credentials.
 const FAKE_DB_KEY = 'triber_users';
 const DEMO_TOKEN = 'fake_jwt_token_for_development_12345';
+
+const defaultNotificationSettings: NotificationSettings = {
+    'proposal-received': true,
+    'proposal-reviewed': true,
+    'message-received': true,
+    'launches': true,
+    'updates': false,
+    'newsletter': false,
+};
+
 
 //demo user until the API is ready
 const demoUser: User = {
@@ -42,7 +52,8 @@ isProfileComplete: false,
 isFundabilityTestTaken: false,
 isDealRoomProfileComplete: false,
 isValuationComplete: false,
-isProposalProcessStarted: false
+isProposalProcessStarted: false,
+ notificationSettings: defaultNotificationSettings,
 };
 class AuthService {
    constructor() {
@@ -137,6 +148,7 @@ class AuthService {
           isDealRoomProfileComplete: false,
           isValuationComplete: false,
           isProposalProcessStarted: false,
+          notificationSettings: defaultNotificationSettings,
         };
         
         // "Save" the new user to our mock database

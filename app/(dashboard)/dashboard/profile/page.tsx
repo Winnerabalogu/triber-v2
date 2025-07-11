@@ -4,7 +4,9 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { useModal } from "@/contexts/ModalContext";
 import AuthService from "@/services/auth.service";
-import { User } from "@/lib/types";
+import CoreService from "@/services/core.service";
+import ChatService from "@/services/chat.service";
+import { User, Investor, ConversationPreview } from "@/lib/types";
 import ProfileHeader from "@/components/dashboard/profile/ProfileHeader";
 import SettingsCard from "@/components/dashboard/profile/SettingsCard";
 import InfoCard from "@/components/dashboard/profile/InfoCard";
@@ -24,9 +26,30 @@ export default function ProfilePage() {
     const [profileData, setProfileData] = useState<Partial<User>>({});
      const [newAvatarFile, setNewAvatarFile] = useState<File | null>(null);
     const [avatarPreviewUrl, setAvatarPreviewUrl] = useState<string | null>(null);
+    const [wishlistedInvestors, setWishlistedInvestors] = useState<Investor[]>([]);
+    const [recentConversations, setRecentConversations] = useState<ConversationPreview[]>([]);
+    const [isCardsLoading, setIsCardsLoading] = useState(true);
+
+
     useEffect(() => {
         if (user) {
             setProfileData(user);
+      const fetchCardData = async () => {
+                setIsCardsLoading(true);
+                try {
+                    const [investors, conversations] = await Promise.all([
+                        CoreService.getWishlistedInvestors(),
+                        ChatService.getRecentConversations()
+                    ]);
+                    setWishlistedInvestors(investors);
+                    setRecentConversations(conversations);
+                } catch (error) {
+                    console.error("Failed to fetch profile card data", error);
+                } finally {
+                    setIsCardsLoading(false);
+                }
+            };
+            fetchCardData();
         }
     }, [user]);
 
@@ -107,7 +130,7 @@ export default function ProfilePage() {
 
             {activeTab === 'overview' && (
                 <>
-                    <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
+                   <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start">
                         <div className="lg:col-span-1"><SettingsCard /></div>               
                         <div className="lg:col-span-1">
                             <InfoCard 
@@ -116,9 +139,11 @@ export default function ProfilePage() {
                                 onDataChange={handleDataChange} 
                             />
                         </div>
-                        <div className="lg:col-span-1"><ConversationsCard /></div>
+                        <div className="lg:col-span-1">
+                          {isCardsLoading ? <p>Loading conversations...</p> : <ConversationsCard conversations={recentConversations} />}
+                        </div>
                     </div>
-                    <WishlistSection />
+                    {isCardsLoading ? <p>Loading wishlist...</p> : <WishlistSection investors={wishlistedInvestors} />}
                 </>
             )}
              {activeTab === 'security' && (

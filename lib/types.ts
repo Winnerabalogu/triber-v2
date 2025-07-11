@@ -1,3 +1,12 @@
+export interface NotificationSettings {
+  'proposal-received': boolean;
+  'proposal-reviewed': boolean;
+  'message-received': boolean;
+  'launches': boolean;
+  'updates': boolean;
+  'newsletter': boolean;
+}
+
 export interface User {
   id: string;
   firstName?: string;
@@ -25,6 +34,7 @@ export interface User {
   isDealRoomProfileComplete: boolean;
   isValuationComplete: boolean;
   isProposalProcessStarted: boolean;
+  notificationSettings: NotificationSettings; 
 }
 export interface Investor {
   id: string;
@@ -80,6 +90,13 @@ export interface FundabilityHistoryItem {
   score: number;
   status: 'Completed' | 'Pending';
 }
+export interface ConversationPreview {
+  investorId: string;
+  investorName: string;
+  investorAvatar: string;
+  lastMessage: string;
+}
+
 
 interface BaseField { name: string; colSpan?: 1 | 2; }
 export interface TextField extends BaseField { type: 'text' | 'number' | 'date' | 'tel'; label: string; placeholder?: string; }

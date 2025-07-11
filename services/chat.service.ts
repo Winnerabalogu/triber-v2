@@ -1,4 +1,5 @@
-import { ChatConversation, ChatMessage } from "@/lib/types";
+import { ChatConversation, ChatMessage, ConversationPreview } from "@/lib/types";
+
 
 const mockConversation: ChatConversation = {
     id: 'convo_usr123_inv1',
@@ -16,6 +17,13 @@ const mockConversation: ChatConversation = {
         { id: 'msg_7', senderId: 'usr_123', content: 'Hi, yes, David has found it, ask our concierge.', timestamp: '15:42', type: 'text' },
     ]
 };
+
+const mockConversationPreviews: ConversationPreview[] = [
+    { investorId: 'inv_1', investorName: "Amina Halim", lastMessage: "Sounds good, let's connect next week.", investorAvatar: 'https://placehold.co/64x64/2dd4bf/FFFFFF/png?text=AH' },
+    { investorId: 'inv_2', investorName: "Babatunde Cole", lastMessage: "Awesome work, can you change...", investorAvatar: 'https://placehold.co/64x64/3b82f6/FFFFFF/png?text=BC' },
+    { investorId: 'inv_3', investorName: "Chidinma Okoro", lastMessage: "Have a great afternoon...", investorAvatar: 'https://placehold.co/64x64/a855f7/FFFFFF/png?text=CO' },
+];
+
 
 
 class ChatService {
@@ -38,9 +46,15 @@ class ChatService {
             id: `msg_${Date.now()}`,
             ...message
         };
-        // MOCK: In a real app, this would be a POST request. Here we just log it.
-        // You could also update the mockConversation object here for persistence during the session.
+        // MOCK: In a real app, this would be a POST request. Here we just log it.        
         return new Promise(resolve => setTimeout(() => resolve(newMessage), 300));
+    }
+    async getRecentConversations(): Promise<ConversationPreview[]> {
+        console.log("[ChatService] Fetching recent conversation previews...");
+        // MOCK LOGIC: A real backend would provide this aggregated data.
+        return new Promise(resolve => {
+            setTimeout(() => resolve(mockConversationPreviews), 500);
+        });
     }
 }
 

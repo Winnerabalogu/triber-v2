@@ -1,6 +1,7 @@
 import { Eye, FileText, Link2, Target } from "lucide-react";
 import { FundabilityHistoryItem, Investor, User, ValuationHistoryItem } from '@/lib/types';
 import FundabilityCalculator from './fundabilityCalculator.service';
+import NotificationService from './notification.service';
 // import api from './api';
 interface FeatureUsageData {
   name: string;
@@ -169,23 +170,24 @@ class CoreService {
     return new Promise(resolve => setTimeout(() => resolve(mockValuationHistory), 1000));
   }
 
-  async submitValuationForm(data: any): Promise<{ score: number; reportData: any }> {
-    console.log("[CoreService] Calculating valuation from form data:", data);
-    
-    // MOCK CALCULATION LOGIC: This will be moved into the form component
-    // but the service simulates receiving data and returning a result.
-    const score = Math.floor(Math.random() * 40) + 50;
-    
-    return new Promise(resolve => {
-        setTimeout(() => {
-            resolve({
-                score,
-                reportData: { title: "Valuation Report", score, ...data }
-            });
-        }, 1500);
-    });
-  }
+   async submitValuationForm(data: any): Promise<{ score: number; reportData: any }> {
+        console.log("[CoreService] Calculating valuation from form data:", data);
+        const score = Math.floor(Math.random() * 40) + 50;
 
+        return new Promise(resolve => {
+            setTimeout(() => {                
+                NotificationService.addSystemNotification({
+                    type: 'valuation_report',
+                    text: `Your valuation report for ${data.businessName || 'your business'} is ready.`,
+                });
+
+                resolve({
+                    score,
+                    reportData: { title: "Valuation Report", score, ...data }
+                });
+            }, 1500);
+          });
+    }
    async uploadDocument(file: File, onProgress: (progress: number) => void): Promise<{ success: boolean, url: string }> {
         console.log(`[CoreService] Simulating upload for: ${file.name}`);
         return new Promise(resolve => {
@@ -210,12 +212,15 @@ class CoreService {
               const reportData = {
                   ...data,
                   score: totalScore,
-              };
-              console.log("[CoreService] Test processed. Returning report data:", reportData);
-              resolve(reportData);
-          }, 1000);
-      });
-  }
+              };NotificationService.addSystemNotification({
+                    type: 'fundability_report',
+                    text: `Your fundability report for ${data.businessName || 'your business'} is ready.`,
+                });
+
+                resolve(reportData);
+            }, 1500);
+        });
+    }
 
     async getFundabilityHistory(): Promise<FundabilityHistoryItem[]> {
         console.log("[CoreService] Fetching fundability history...");
@@ -292,6 +297,14 @@ class CoreService {
             setTimeout(() => {
                 resolve({ success: true });
             }, 500);
+        });
+    }
+    async getWishlistedInvestors(): Promise<Investor[]> {
+        console.log("[CoreService] Fetching wishlisted investors...");
+        // MOCK LOGIC: In a real app, this would be an API call.
+        // For now, we'll return the first 3 investors from our main mock list.
+        return new Promise(resolve => {
+            setTimeout(() => resolve(mockInvestors.slice(0, 3)), 500);
         });
     }
 }

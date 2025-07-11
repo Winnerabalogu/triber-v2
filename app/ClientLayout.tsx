@@ -7,10 +7,11 @@ import ScrollToTopButton from "@/components/ScrollToTopButton";
 import ThemeToggleButton from "@/components/ThemeToggleButton";
 import { ModalProvider } from '@/contexts/ModalContext';
 import ModalManager from '@/components/modals/ModalManager';
-import { Toaster } from "@/components/ui/toaster";
+import { Toaster } from "@/components/ui/sonner"
 import { AuthProvider, useAuth } from "@/contexts/AuthContext";
 import Preloader from "@/components/ui/Preloader";
 import { AnimatePresence } from "framer-motion";
+
 
  
 function AppContent({ children }: { children: React.ReactNode }) {
@@ -41,6 +42,7 @@ export default function ClientLayout({ children }: { children: React.ReactNode }
         <ConfettiProvider>                                
           <AppContent>
             {children}
+            <Toaster richColors />
           </AppContent>   
         </ConfettiProvider>
       </ModalProvider>

@@ -1,4 +1,5 @@
 import { CheckCircle, MoreHorizontal, Inbox } from 'lucide-react';
+import EmptyState from '@/components/ui/EmptyState';
 
 interface Activity {
   title: string;
@@ -54,13 +55,12 @@ export default function RecentActivitySection({ recentActivity }: RecentActivity
                         </div>
                     </div>
                 </div>
-            ) : (
-                // If there is NO activity, render the empty state
-                <div className="flex flex-col items-center justify-center text-center py-12 border-2 border-dashed border-border rounded-lg shadow-md shadow-foreground/20">
-                    <Inbox className="w-12 h-12 text-muted-foreground/50 mb-4" />
-                    <h4 className="font-semibold text-foreground">No activity performed yet</h4>
-                    <p className="text-sm text-muted-foreground mt-1">Your recent actions will appear here.</p>
-                </div>
+            ) : (                
+                <EmptyState
+                icon={Inbox}
+                title="No Activity Performed Yet"
+                description="Your recent actions, such as completing tests or sending proposals, will appear here."
+              />
             )}
         </div>
     )
