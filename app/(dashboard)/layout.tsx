@@ -1,5 +1,4 @@
 "use client";
-import { Toaster } from "@/components/ui/sonner"
 import { useState, useEffect } from 'react';
 import { usePathname } from 'next/navigation';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -73,8 +72,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
         />
         
         <main className="flex-1 overflow-y-auto p-6 scrollbar-hide pb-20">
-          {children}
-          <Toaster richColors />
+          {children}          
         </main>
         
       </div>

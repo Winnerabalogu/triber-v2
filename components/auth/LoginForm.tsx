@@ -39,7 +39,7 @@ export default function LoginForm() {
         router.push('/dashboard');
       } else {        
         toast.info("Welcome! Let's get your profile set up.");
-        router.push('/onboarding');
+        router.push('/auth/onboarding');
       }
     } else if (state.message) {
       toast.error("Login Failed", { description: state.message });

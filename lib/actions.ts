@@ -22,6 +22,7 @@ interface LoginErrorAction {
   success: false;
   message: string;
 }
+export type LoginActionResult = LoginSuccessAction | LoginErrorAction;
 interface SuccessAction {
   success: true;
   message: string;
@@ -32,6 +33,7 @@ interface ErrorAction {
   success: false;
   message: string;
 }
+export type ActionResult = SuccessAction | ErrorAction;
 interface ValidateOtpResult {
   success: boolean;
   message: string;
@@ -94,7 +96,7 @@ const mapApiBusinessToAppUser = (apiBusiness: any): User => {
     isValuationComplete: false, isProposalProcessStarted: false,
   };
 };
-export type ActionResult = SuccessAction | ErrorAction;
+
 
 export async function registerUser(previousState: ActionResult, formData: FormData): 
 Promise<ActionResult> {  
@@ -117,7 +119,7 @@ Promise<ActionResult> {
     password,
   };
 
-  if (USE_MOCK_API) {
+if (USE_MOCK_API) {
     console.log('[MOCK API] Simulating registration for:', email);
     return new Promise(resolve => setTimeout(() => resolve({
         success: true,
@@ -150,7 +152,7 @@ Promise<ActionResult> {
   }
 }
 
-export type LoginActionResult = LoginSuccessAction | LoginErrorAction;
+
 
 
 export async function loginUser(previousState: LoginActionResult, formData: FormData): Promise<LoginActionResult> {
@@ -162,14 +164,21 @@ export async function loginUser(previousState: LoginActionResult, formData: Form
   }
    if (USE_MOCK_API) {
     console.log('[MOCK API] Simulating login for:', email);
-    if (email.includes("new@")) {
+    if (email === MOCK_BUSINESS_USER.email) {
+      console.log('[MOCK API] Recognized as existing user. Returning full profile.');      
       return new Promise(resolve => setTimeout(() => resolve({
-          success: true, token: 'mock_jwt_for_new_user', user: null
+          success: true,
+          token: 'mock_jwt_for_existing_user',
+          user: MOCK_BUSINESS_USER
+      }), 1000));
+    } else {
+      console.log('[MOCK API] Recognized as new user. Routing to onboarding.');      
+      return new Promise(resolve => setTimeout(() => resolve({
+          success: true,
+          token: 'mock_jwt_for_new_user',
+          user: null
       }), 1000));
     }
-    return new Promise(resolve => setTimeout(() => resolve({
-        success: true, token: 'mock_jwt_for_existing_user', user: MOCK_BUSINESS_USER
-    }), 1000));
   }
 
   

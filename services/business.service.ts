@@ -31,13 +31,32 @@ const MOCK_API_BUSINESS_RESPONSE = {
 class BusinessService {
   async createBusiness(businessData: { [key: string]: any }, logoFile?: File | null): Promise<any> {
      if (USE_MOCK_API) {
-        console.log('[MOCK API] Simulating business creation:', businessData);
-        return new Promise(resolve => setTimeout(() => resolve({
-            ...MOCK_API_BUSINESS_RESPONSE, // Return a complete object
+        console.log('[MOCK API] Simulating business creation with form data:', businessData);                
+        const mockApiResponse = {
+            id: Math.floor(Math.random() * 1000),
             publicId: `new_biz_${Date.now()}`,
             businessName: businessData.businessName,
-            ...businessData
-        }), 1500));
+            businessEmail: businessData.email, 
+            businessPhone: businessData.phoneNumber,
+            businessLogoUrl: "https://placehold.co/128x128/22c55e/FFFFFF/png?text=N",
+            businessStatus: businessData.businessStatus,
+            interestedIn: businessData.interest,
+            industry: businessData.industry,
+            numOfEmployees: businessData.employeeCount,
+            yearEstablished: new Date().getFullYear(),
+            location: businessData.businessAddress,
+            description: businessData.businessDescription,
+            assets: businessData.annualTurnover, 
+            reportedSales: businessData.annualTurnover,
+            businessStage: businessData.businessStatus, 
+            businessLegalEntity: businessData.legalIdentity,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString(),
+            isSuspended: false,
+            businessVerificationStatus: true
+        };
+
+        return new Promise(resolve => setTimeout(() => resolve(mockApiResponse), 1500));
     }
 
     console.log('[BusinessService] Creating new business');
